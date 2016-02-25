@@ -4,12 +4,6 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+This is the internet home of Dr. Andrew Tyre, Professor of Wildlife Ecology at the [University of Nebraska - Lincoln](http://snr.unl.edu/aboutus/who/people/faculty-member.asp?pid=523). All opinions on this page are my own.
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jglovier" %} /
-[jekyll-new](https://github.com/jglovier/jekyll-new)
-
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+Nothing fancy, just a place to put ideas, experiment with github hosting, and using R Markdown.
