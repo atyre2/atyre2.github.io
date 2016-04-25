@@ -1,0 +1,13 @@
+@article{10.2307/2458081,
+ ISSN = {00030147, 15375323},
+ URL = {http://www.jstor.org/stable/2458081},
+ author = {F. A. Hays},
+ journal = {The American Naturalist},
+ number = {781},
+ pages = {184-186},
+ publisher = {[University of Chicago Press, American Society of Naturalists]},
+ title = {The Primary Sex Ratio in Domestic Chickens},
+ volume = {79},
+ year = {1945}
+}
+

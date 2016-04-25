@@ -1,0 +1,90 @@
+---
+layout: post
+
+---
+
+I got the following email the other day
+
+> I’m trying to find the answer to a pretty simple question, but I’m having a hard time finding a reputable source online, so I Googled "best ornithology schools" and you all popped up! I’m wondering if the sex ratio for egg-laying chickens is about equal, 1 male chick : 1 female chick born.
+
+Obviously a fan! I tried the same search and I must say we didn't exactly pop to the top.
+
+I searched 'sex ratio chickens' and the first link 
+was [Hays (1945)][hays1945]. From *The American Naturalist* no less, so a peer reviewed journal and a credible source. In the introduction he summarizes a range of previous sources with estimates varying from 48.77 \% males to 51.38 \% males. So approximately 50/50. In his own work (which is behind a paywall so not publicly available) he reports 49.7 \% males. His methods were
+
+> In the ten-year period from 1935 to 1944 a total of 39 pure-
+> bred Rhode Island Red females mated to pure-bred Rhode Island
+> Red males qualified for study. Each female had a perfect record
+> in fertility and hatchability and produced ten or more chicks
+> during March and April
+
+This is 1945, so statistics are largely absent. He does suggest that the standard error of the difference between yearly sex ratios and 50 \% is 1.42. I think that's just treating each year as a single observation. But the data are given. 
+
+```{r, table1, echo=FALSE}
+table1 <- data.frame(Year = 1944:1935,
+                     N_dams = c(8,4,0,4,6,5,3,2,3,4),
+                     Males = c(70,43,NA,51,92,50,29,22,21,54),
+                     Females = c(78,45,NA,47,85,48,28,22,34,51),
+                     Sex_ND = c(9,9,NA,3,5,10,3,4,14,4))
+knitr::kable(table1, 
+             col.names=c("Year","# of Dams","# of Male Chicks","# of Female Chicks", "Sex not determined"),
+             caption = "Sex ratios of hatched chicks.")
+```
+
+So treating each year as a normally distributed observation I get
+
+```{r, ttest}
+sexratio <- with(table1, 100 * Males / (Females + Males))
+sd(sexratio - 50, na.rm = TRUE) / sqrt(9)
+t.test(sexratio - 50)
+```
+
+So I get a slightly different standard error, but either way it isn't significantly different from 50 \%. However this is ignoring a huge amount of information in this data.
+For example, one thing that's cool is the variation between years.
+
+```{r, btwyears}
+library(lme4)
+year.model <- glmer(cbind(Males,Females)~1 + (1|Year), data = table1, family=binomial)
+summary(year.model)
+```
+
+So same conclusion as before. The intercept is not significantly different from 0, which is what we expect for 50/50 sex ratio. In addition, there's no evidence of significant variation between years. The estimated random effect variance is zero. 
+
+Hays also has a table of data for 11 hens with complete records of sex of chick. The sex ratio there extends from 22 \% up to 65 \%! So repeating the same thing
+
+```{r, table2, echo=FALSE}
+table2 <- data.frame(Hen = 1:11,
+                     Males = c(4,4,113,15,18,9,14,9,11,15,15),
+                     Females = c(14,7,7,13,12,9,19,6,9,12,18))
+```
+
+```{r, mixed_ind}
+ind.model <- glmer(cbind(Males,Females)~1 + (1|Hen), data = table2, family=binomial)
+summary(ind.model)
+```
+
+Again, the intercept is not significantly different from zero, so across the entire population the average sex ratio is not different from 50/50. However here we do see a non-zero variance between hens. Individual hens may have sex ratios that deviate from 50/50. It's a bit hard to interpret that standard deviation because it is on a log-odds scale. 
+
+Imagine you are ordering chicks 'straight run', which means without sexing. This is the cheapest way to get chicks because the expertise to sex chicks at a young age is expensive. You want 4 hens, so you decide to order 8 chicks. With a 50/50 sex ratio you'll get 4 hens, right? 
+
+Wrong! You can get any number of hens between 0 and 8! 4 is just the most likely outcome. In fact, nearly 4 out of 10 orders you'll get less than 4 hens. Of course, you could also do better; in 4 out of 10 orders you'll get more than 4 hens. The probabilities of each outcome are
+
+```{r}
+binomial_probs = data.frame(hens=0:8,
+                            d = dbinom(0:8, 8, 0.5),
+                            p = pbinom(0:8, 8, 0.5))
+
+knitr::kable(binomial_probs, digits = 2)
+```
+
+However, that assumes that there is no variation among hens, which we know is false. I can simulate data from the fitted model to see if this variation makes a difference to the probability of getting less than 4 hens.
+
+```{r, simulate, eval=FALSE}
+sims <- simulate(ind.model, 1000)
+lessthan4 <- sapply(sims, function(x) sum(x[,"F"]))
+```
+
+
+
+
+[hays1945]: http://www.jstor.org/stable/2458081 "The primary sex ratio in domestic chickens"
