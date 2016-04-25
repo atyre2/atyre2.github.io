@@ -1,12 +1,19 @@
 ---
 layout: post
 title:  The trouble with tibbles
-date: 2016-04-25 11:18:58
+date: 2016-04-25 14:07:33
 published: true
 tags: [example1, example2]
 ---
 
-This is a test.
+Hadley Wickham's `dplyr` package makes complex 
+data manipulations easy to describe. However, 
+dplyr functions all return "tibbles" rather than 
+data.frames. Class tbl inherits from data.frame, so
+you can use tbls everywhere you use data.frames. 
+Except when you can't. 
+
+Here's one example that tripped me up recently.
 
 
 ```r
@@ -64,7 +71,9 @@ my_first_tbl
 ```
 
 So I don't have to do `sapply(df, class)` to see
-what is going on with the contents. This is good.
+what is going on with the contents. This is good. 
+tbls also print out only what fits on the console, 
+which is also nice.
 
 But check this out:
 
@@ -141,7 +150,7 @@ to factors:
 
 ```r
 my_second_tbl <- data_frame(a = 1:26,
-                 b = letters)
+                            b = letters)
 my_second_tbl
 ```
 
@@ -163,3 +172,6 @@ my_second_tbl
 ## ..   ...   ...
 ```
 
+I think I'm a fan of tibbles, but even if I'm not
+I am in love with dplyr, so I'd better get used to 
+tibbles. 
