@@ -10,7 +10,7 @@ title: A few cheap shots
 email: atyre2@unl.edu
 description: > # this means to ignore newlines until "baseurl:"
   Random thoughts, code snippets, and a trail of internet breadcrumbs.
-baseurl: "/" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://atyre2.github.io" # the base hostname & protocol for your site
 twitter_username: atiretoo
 github_username:  atyre2
