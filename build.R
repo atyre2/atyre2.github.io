@@ -13,6 +13,7 @@ local({
   
   output = sprintf('_posts/%s-%s.md',Sys.Date(),d)
 
-  knitr::opts_knit$set(width = 70)
+  knitr::opts_knit$set(width = 70,
+                       base.url = format(Sys.Date(),"%Y/%m/%d/"))
   knitr::knit(a[1], output, quiet = TRUE, encoding = 'UTF-8', envir = .GlobalEnv)
 })
