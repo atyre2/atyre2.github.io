@@ -1,0 +1,12 @@
+---
+layout: post
+title:  Do we need more data to stop the 6th  great extinction?
+date: `r Sys.time()`
+published: true
+tags: [example1, example2]
+---
+
+[John Platt's takepart article](http://www.takepart.com/article/2016/04/21/information-age-failing-world-s-wildlife) 
+says yes. In fact, a new study says we have only 5%
+of the data we need.
+
