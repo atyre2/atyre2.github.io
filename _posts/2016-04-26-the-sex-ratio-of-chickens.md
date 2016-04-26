@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  The sex ratio of chickens
-date: 2016-04-26 14:37:36
+date: 2016-04-26 16:30:12
 published: true
 tags: [R, Outreach, Simulation, Mixed Models]
 ---
@@ -220,9 +220,9 @@ gg <- ggplot(as.data.frame(males),aes(x=males)) + geom_bar() + geom_line(data=bi
 gg
 {% endhighlight %}
 
-![plot of chunk simulate](figure/the-sex-ratio-of-chickens/simulate-1.png) 
+![plot of chunk simulate](2016/04/26/figure/the-sex-ratio-of-chickens/simulate-1.png) 
 
-So by including the between hen variation we end up with 34 % of orders having more than 4 females. This is about the same as without the between individual variation. However, there is a greater chance of getting 1 or 0 hens (7 or 8 males) in the order.
+So by including the between hen variation we end up with 35 % of orders having more than 4 females. This is about the same as without the between individual variation. However, there is a greater chance of getting 1 or 0 hens (7 or 8 males) in the order.
 
 Not sure what the takehome is here. Randomness is two faced?
 
