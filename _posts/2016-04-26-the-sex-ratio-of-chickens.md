@@ -194,7 +194,7 @@ gg <- ggplot(as.data.frame(males),aes(x=males)) + geom_bar() + geom_line(data=bi
 gg
 ```
 
-![plot of chunk simulate](figure/drafts/the-sex-ratio-of-chickens/simulate-1.png)
+![plot of chunk simulate](../figure/drafts/the-sex-ratio-of-chickens/simulate-1.png)
 
 So by including the between hen variation we end up with 36 % of orders having more than 4 females. This is about the same as without the between individual variation. However, there is a greater chance of getting 1 or 0 hens (7 or 8 males) in the order.
 
