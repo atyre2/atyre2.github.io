@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  The sex ratio of chickens
-date: `r Sys.time()`
+date: 2016-04-26 11:52:46
 published: true
 tags: [R, Outreach, Simulation, Mixed Models]
 ---
@@ -23,47 +23,125 @@ was [Hays (1945)][hays1945]. From *The American Naturalist* no less, so a peer r
 
 This is 1945, so statistics are largely absent. He does suggest that the standard error of the difference between yearly sex ratios and 50 \% is 1.42. I think that's just treating each year as a single observation. But the data are given. 
 
-```{r, table1, echo=FALSE}
-table1 <- data.frame(Year = 1944:1935,
-                     N_dams = c(8,4,0,4,6,5,3,2,3,4),
-                     Males = c(70,43,NA,51,92,50,29,22,21,54),
-                     Females = c(78,45,NA,47,85,48,28,22,34,51),
-                     Sex_ND = c(9,9,NA,3,5,10,3,4,14,4))
-knitr::kable(table1, 
-             col.names=c("Year","# of Dams","# of Male Chicks","# of Female Chicks", "Sex not determined"),
-             caption = "Sex ratios of hatched chicks.")
-```
+
+| Year| # of Dams| # of Male Chicks| # of Female Chicks| Sex not determined|
+|----:|---------:|----------------:|------------------:|------------------:|
+| 1944|         8|               70|                 78|                  9|
+| 1943|         4|               43|                 45|                  9|
+| 1942|         0|               NA|                 NA|                 NA|
+| 1941|         4|               51|                 47|                  3|
+| 1940|         6|               92|                 85|                  5|
+| 1939|         5|               50|                 48|                 10|
+| 1938|         3|               29|                 28|                  3|
+| 1937|         2|               22|                 22|                  4|
+| 1936|         3|               21|                 34|                 14|
+| 1935|         4|               54|                 51|                  4|
 
 So treating each year as a normally distributed observation I get
 
-```{r, ttest}
+
+```r
 sexratio <- with(table1, 100 * Males / (Females + Males))
 sd(sexratio - 50, na.rm = TRUE) / sqrt(9)
+```
+
+```
+## [1] 1.45542
+```
+
+```r
 t.test(sexratio - 50)
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  sexratio - 50
+## t = -0.63463, df = 8, p-value = 0.5434
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  -4.279855  2.432553
+## sample estimates:
+##  mean of x 
+## -0.9236509
 ```
 
 So I get a slightly different standard error, but either way it isn't significantly different from 50 %. However this is ignoring a huge amount of information in this data.
 For example, one thing that's cool is the variation between years.
 
-```{r, btwyears}
+
+```r
 library(lme4)
+```
+
+```
+## Loading required package: Matrix
+```
+
+```r
 year.model <- glmer(cbind(Males,Females)~1 + (1|Year), data = table1, family=binomial)
 summary(year.model)
+```
+
+```
+## Generalized linear mixed model fit by maximum likelihood (Laplace
+##   Approximation) [glmerMod]
+##  Family: binomial  ( logit )
+## Formula: cbind(Males, Females) ~ 1 + (1 | Year)
+##    Data: table1
+## 
+##      AIC      BIC   logLik deviance df.resid 
+##     52.5     52.9    -24.2     48.5        7 
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -1.7018 -0.1485  0.1845  0.3634  0.6179 
+## 
+## Random effects:
+##  Groups Name        Variance Std.Dev.
+##  Year   (Intercept) 0        0       
+## Number of obs: 9, groups:  Year, 9
+## 
+## Fixed effects:
+##             Estimate Std. Error z value Pr(>|z|)
+## (Intercept) -0.01379    0.06781  -0.203    0.839
 ```
 
 So same conclusion as before. The intercept is not significantly different from 0, which is what we expect for 50/50 sex ratio. In addition, there's no evidence of significant variation between years. The estimated random effect variance is zero. 
 
 Hays also has a table of data for 11 hens with complete records of sex of chick. The sex ratio there extends from 22 % up to 65 %! So repeating the same thing
 
-```{r, table2, echo=FALSE}
-table2 <- data.frame(Hen = 1:11,
-                     Males = c(4,4,113,15,18,9,14,9,11,15,15),
-                     Females = c(14,7,7,13,12,9,19,6,9,12,18))
-```
 
-```{r, mixed_ind}
+
+
+```r
 ind.model <- glmer(cbind(Males,Females)~1 + (1|Hen), data = table2, family=binomial)
 summary(ind.model)
+```
+
+```
+## Generalized linear mixed model fit by maximum likelihood (Laplace
+##   Approximation) [glmerMod]
+##  Family: binomial  ( logit )
+## Formula: cbind(Males, Females) ~ 1 + (1 | Hen)
+##    Data: table2
+## 
+##      AIC      BIC   logLik deviance df.resid 
+##     71.7     72.5    -33.9     67.7        9 
+## 
+## Scaled residuals: 
+##      Min       1Q   Median       3Q      Max 
+## -0.70263 -0.17421 -0.02554  0.04426  0.94412 
+## 
+## Random effects:
+##  Groups Name        Variance Std.Dev.
+##  Hen    (Intercept) 0.7791   0.8827  
+## Number of obs: 11, groups:  Hen, 11
+## 
+## Fixed effects:
+##             Estimate Std. Error z value Pr(>|z|)
+## (Intercept)   0.2053     0.2978   0.689    0.491
 ```
 
 Again, the intercept is not significantly different from zero, so across the entire population the average sex ratio is not different from 50/50. However here we do see a non-zero variance between hens. Individual hens may have sex ratios that deviate from 50/50. It's a bit hard to interpret that standard deviation because it is on a log-odds scale. 
@@ -72,7 +150,8 @@ Imagine you are ordering chicks 'straight run', which means without sexing. This
 
 Wrong! You can get any number of hens between 0 and 8! 4 is just the most likely outcome. In fact, nearly 4 out of 10 orders you'll get less than 4 hens. Of course, you could also do better; in 4 out of 10 orders you'll get more than 4 hens. The probabilities of each outcome are
 
-```{r}
+
+```r
 binomial_probs = data.frame(hens=0:8,
                             d = dbinom(0:8, 8, 0.5),
                             p = pbinom(0:8, 8, 0.5))
@@ -80,9 +159,24 @@ binomial_probs = data.frame(hens=0:8,
 knitr::kable(binomial_probs, digits = 2)
 ```
 
+
+
+| hens|    d|    p|
+|----:|----:|----:|
+|    0| 0.00| 0.00|
+|    1| 0.03| 0.04|
+|    2| 0.11| 0.14|
+|    3| 0.22| 0.36|
+|    4| 0.27| 0.64|
+|    5| 0.22| 0.86|
+|    6| 0.11| 0.96|
+|    7| 0.03| 1.00|
+|    8| 0.00| 1.00|
+
 However, that assumes that there is no variation among hens, which we know is false. I can simulate data from the fitted model to see if this variation makes a difference to the probability of getting less than 4 hens.
 
-```{r, simulate, eval=TRUE}
+
+```r
 hens <- 1000
 clutchsize <- 8
 clutches <- matrix(NA, nrow = hens, ncol = 2)
@@ -100,7 +194,9 @@ gg <- ggplot(as.data.frame(males),aes(x=males)) + geom_bar() + geom_line(data=bi
 gg
 ```
 
-So by including the between hen variation we end up with `r floor(100 * sum(males<4)/hens)` % of orders having more than 4 females. This is about the same as without the between individual variation. However, there is a greater chance of getting 1 or 0 hens (7 or 8 males) in the order.
+![plot of chunk simulate](figure/drafts/the-sex-ratio-of-chickens/simulate-1.png)
+
+So by including the between hen variation we end up with 36 % of orders having more than 4 females. This is about the same as without the between individual variation. However, there is a greater chance of getting 1 or 0 hens (7 or 8 males) in the order.
 
 Not sure what the takehome is here. Randomness is two faced?
 
