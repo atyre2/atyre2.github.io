@@ -1,0 +1,68 @@
+---
+layout: post
+title:  The value of sexing chickens
+date: `r Sys.time()`
+published: true
+tags: [R, Outreach, Simulation, Mixed Models]
+---
+
+The other day [I got a bit carried away 
+with an answer to a simple question.]({% 
+post_url 2016-4-26-the-sex-ratio-of-chicken
+s %}) In the post I said buying 
+"straight-run" chickens was cheaper than 
+buying sexed chickens, which is why knowing
+the sex ratio is important to figuring out 
+how many to buy. [Someone on twitter said 
+they would never buy straight run for that 
+reason.](https://twitter.com/TrashBirdEcol/status/725141100449681409)
+Which got me wondering. What is the value
+of information for a sexed chick?<sup id="a1">[1](#f1)</sup>
+
+
+```{r, table2, echo=FALSE, include=FALSE}
+table2 <- data.frame(Hen = 1:11,
+                     Males = c(4,4,113,15,18,9,14,9,11,15,15),
+                     Females = c(14,7,7,13,12,9,19,6,9,12,18))
+
+library(lme4)
+ind.model <- glmer(cbind(Males,Females)~1 + (1|Hen), data = table2, family=binomial)
+summary(ind.model)
+```
+
+We have to choose between two options: order
+*n* chicks 'straight run', which means 
+without sexing, or *m* sexed individuals.
+[Assorted brown egg layers](http://www.mypetchicken.com/catalog/Day-Old-Baby-Chicks/Assorted-Brown-Egg-Layers-Standard-p581.aspx) 
+are $2.50 each "Straight run" and $3.00 each
+as sexed females. I start by assume that a
+hen is worth 1 point of utility up to 4 
+hens, and roosters are valueless. 
+
+```{r optimize1, eval=TRUE}
+utility <- function(h, maxhens = 4){
+  u <- ifelse(h < maxhens+1, h, maxhens)
+  return(u)
+}
+
+mean_p <- ind.model@beta
+var_p <- as.numeric(vcov(ind.model)) # uncertainty in p
+var_ind <- ind.model@theta^2
+logodds <- rnorm(hens, mean = mean_p, sd = sqrt(var_p + var_ind))
+# convert to probability
+p <-  1 / (1 + exp(-logodds))
+males <- rbinom(hens, size = clutchsize, p = p)
+
+library(ggplot2)
+binomial_probs$freq <- binomial_probs$d * hens
+gg <- ggplot(as.data.frame(males),aes(x=males)) + geom_bar() + geom_line(data=binomial_probs, mapping=aes(x=hens, y=freq))
+gg
+```
+
+So by including the between hen variation we end up with `r floor(100 * sum(males<4)/hens)` % of orders having more than 4 females. This is about the same as without the between individual variation. However, there is a greater chance of getting 1 or 0 hens (7 or 8 males) in the order.
+
+Not sure what the takehome is here. Randomness is two faced?
+
+<b id="f1">1</b> Yes it does appear I have too much time on my hands. OTOH, I need to figure out VOI anyway.[↩](#a1)
+
+[hays1945]: http://www.jstor.org/stable/2458081 "The primary sex ratio in domestic chickens"
