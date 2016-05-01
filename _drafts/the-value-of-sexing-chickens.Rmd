@@ -16,11 +16,11 @@ the sex ratio is important to figuring out
 how many to buy. [Someone on twitter said 
 they would never buy straight run for that 
 reason.](https://twitter.com/TrashBirdEcol/status/725141100449681409)
-Which got me wondering. What is the value
-of information for a sexed chick?<sup id="a1">[1](#f1)</sup>
+Which got me wondering. Is it worth it to buy
+sexed chicks?<sup id="a1">[1](#f1)</sup>
 
-
-```{r, table2, echo=FALSE, include=FALSE}
+Here's the data and the model.
+```{r, fitModel}
 table2 <- data.frame(Hen = 1:11,
                      Males = c(4,4,113,15,18,9,14,9,11,15,15),
                      Females = c(14,7,7,13,12,9,19,6,9,12,18))
@@ -43,6 +43,14 @@ hens, and roosters are valueless.
 utility <- function(h, maxhens = 4){
   u <- ifelse(h < maxhens+1, h, maxhens)
   return(u)
+}
+
+sexed <- utility(1:10)
+straight <- vector("numeric",10)
+
+for (n in 1:10){
+  phens <- dbinom(0:n, size=n, p = 0.5)
+  straight[n] <- sum(utility(0:n)*phens)
 }
 
 mean_p <- ind.model@beta
