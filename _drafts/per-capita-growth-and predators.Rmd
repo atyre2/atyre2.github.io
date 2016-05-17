@@ -1,0 +1,70 @@
+--- 
+layout: post 
+title:  How do predators change population growth? 
+published: true 
+tags: [population regulation, ecology] 
+---
+
+The logistic model of population growth includes the effects of predation.
+Predators are one of the factors contributing to death rates, and so if a
+species has any predators at all, predation is part of the logistic model. This
+isn't widely appreciated. What I want to do here is ask what kinds of predation
+are consistent with the basic logistic model.
+
+Start with the fundamental equation of poplation dynamics:
+
+$$ 
+  N' = bN - dN + I - E 
+$$
+
+$b$ and $d$ are per capita birth and death rates. $N'$ is the rate of change in
+the population.  I assume $I = E = 0$ (a closed population), and divided by $N$
+to convert this to a per capita rate of change.
+
+$$ 
+  \frac{N'}{N} = b\left(N\right) - d\left(N\right) 
+$$
+
+The logistic model when $b(N)$ and $d(N)$ are linear functions of $N$. As long
+as $db/dN < 0$, $dd/dN > 0$, and $b(0) > d(0)$[^1] this model has a positive
+equilibrium point which we call $K$, the carrying capacity. Now we usually
+assume these changes are due to intra-specific competition. But predation causes
+death, so what kind of predation can be accommodated in this model without
+changing the fundamental dynamics?
+
+## Modelling basic predators
+
+The simplest form of predator-prey interaction is a mass action model, where the
+frequency of interactions between a predator and prey are proportional to the
+product of their abundances. The constant of proportionality represents all
+kinds of processes, like the predators ability to detect the prey, pursue and
+capture the prey, etc. So the number of prey eaten by $P$ predators is 
+$E = a NP$,^[E is now *eaten* not emigrated] and dividing by $N$ to put it into
+our per capita growth rate equation
+
+$$ 
+  \frac{N'}{N} = b\left(N\right) - d\left(N\right) - aP 
+$$
+
+This leads to an interesting observation: as long as $P$ is constant, and 
+$b(0) > d(0) + aP$, this is still the classical logistic model. $P$ can be
+(approximately) constant for all sorts of reasons. The generation time of the
+predator could be very slow compared to the prey. The predator could eat lots of
+other things, and so changes in the focal species abundance don't affect the predator
+population very much.
+
+One interesting observation from this addition to the logistic model: if outside forces cause $P$ to 
+increase such that $b(0) < d(0) + aP$, then the focal species population will 
+begin to decline exponentially towards 0. 
+
+## Adding some reality
+
+The predators above don't have alot of behavior. In particular, they never get full and they never ignore the focal species. Both of these phenomena are well known for real predators. 
+
+### Predator satiation
+
+A real predator takes some amount of time to ''handle'' a prey item. Handling time includes the time needed to capture and subdue, consume, and digest the prey. The key assumption is that a predator can only handle one prey at a time. When prey are scarce, this doesn't really matter. The predators time is dominated by the time spent searching for prey. But the more abundant a prey item is, the more time is spent handling instead of searching. Ultimately, the predator spends all of its time handling prey! 
+This phenomenon sets an upper limit on the number of prey that can be consumed by a single predator.^[Buzz Holling first described this phenomenon after making his secretary pick sandpaper disks off her desk while blindfolded.] The resulting non-linear relationship between prey abundance and predation rate is called a Type II functional response. The basic predator model is known as a Type I functional response. 
+
+
+[^1]: Actually $dd/dN$ or $db/dN$ can be zero.
