@@ -46,7 +46,7 @@ frequency of interactions between a predator and prey are proportional to the
 product of their abundances. The constant of proportionality represents all
 kinds of processes, like the predators ability to detect the prey, pursue and
 capture the prey, etc. So the number of prey eaten by $P$ predators is 
-$E = a NP$,^[E is now *eaten* not emigrated] and dividing by $N$ to put it into
+$E = a NP$,[^4] and dividing by $N$ to put it into
 our per capita growth rate equation
 
 $$ 
@@ -71,7 +71,7 @@ The predators above don't have alot of behavior. In particular, they never get f
 ### Predator satiation
 
 A real predator takes some amount of time to ''handle'' a prey item. Handling time includes the time needed to capture and subdue, consume, and digest the prey. The key assumption is that a predator can only handle one prey at a time. When prey are scarce, this doesn't really matter. The predators time is dominated by the time spent searching for prey. But the more abundant a prey item is, the more time is spent handling instead of searching. Ultimately, the predator spends all of its time handling prey! 
-This phenomenon sets an upper limit on the number of prey that can be consumed by a single predator.^[Buzz Holling first described this phenomenon after making his secretary pick sandpaper disks off her desk while blindfolded.] The resulting non-linear relationship between prey abundance and predation rate is called a Type II functional response. The basic predator model is known as a Type I functional response. 
+This phenomenon sets an upper limit on the number of prey that can be consumed by a single predator.[^3] The resulting non-linear relationship between prey abundance and predation rate is called a Type II functional response. The basic predator model is known as a Type I functional response. 
 The simplest Type II functional response equation is 
 
 $$
@@ -155,3 +155,7 @@ The logistic model turns out to be surprisingly good approximation of what happe
 [^1]: Actually $dd/dN$ or $db/dN$ can be zero.
 
 [^2]: More specifically, $db/dN > -a^2hP$
+
+[^3]: Buzz Holling first described this phenomenon after making his secretary pick sandpaper disks off her desk while blindfolded.
+
+[^4]: E is now *eaten* not emigrated.
