@@ -1,6 +1,6 @@
 local({
   
-  .libPaths(c("C:/Users/Drew/Documents/R/win-library/3.2",.Library))
+  .libPaths(c("C:/Users/Drew/Documents/R/win-library/3.3",.Library))
   knitr::render_jekyll()
 
   # input/output filenames are passed as two additional arguments to Rscript
