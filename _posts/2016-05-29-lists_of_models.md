@@ -380,6 +380,6 @@ I was wondering if this is really better than my old style using a list of formu
 I don't feel I've fully grasped how to effectively use a list column in a data.frame yet, but this was a huge step in the right direction! 
 
 
-[^allthecode]: All the code for this post, including that not shown, [can be found here](http://github.com/atyre2/atyre2.github.io/_drafts/lists_of_models.Rmd).
+[^allthecode]: All the code for this post, including that not shown, [can be found here](https://github.com/atyre2/atyre2.github.io/blob/master/_drafts/lists_of_models.Rmd).
 
 [^1]: This is sometimes called the variable importance weight, and used as an indicator of how important that particular variable is. 
