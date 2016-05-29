@@ -2,14 +2,22 @@
 layout: post 
 title:  Lists of models in a data.frame
 published: true 
-tags: [keyword1, keyword2] 
+tags: [R, multimodel inference, AIC] 
 ---
 
-So a couple weeks ago [I had a stab at putting a list of fitted models into a data.frame](http://atyre2.github.io/2016/05/11/happy-houR-one.html). I didn't succeed. So, here's another try. Load up all the things.[^allthecode]
+So a couple weeks ago [I had a stab at putting a list of fitted models into a data.frame](http://atyre2.github.io/2016/05/11/happy-houR-one.html). I didn't succeed. So, here's another try. 
+
+Load up all the things.
 
 
+{% highlight r %}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(broom)
+{% endhighlight %}
 
-I'll not repeat all the code from that previous post. I have a data.frame that has a character column `models` with the formulas I want. I want the fitted results of that in another column of the same data.frame. 
+I'll not repeat all the code from that previous post.[^allthecode] I have a data.frame that has a character column `models` with the formulas I want. I want the fitted results of that in another column of the same data.frame. 
 
 
 
@@ -140,7 +148,7 @@ Hmmm. OK, so now summaries is a column of data.frames. `mutate()` might not be q
 
 
 
-So that's embarrasing. But now `tidyr` to the rescue with `unnest()`.
+So that's embarrassing. But now `tidyr` to the rescue with `unnest()`.
 
 
 {% highlight r %}
@@ -365,7 +373,7 @@ knitr::kable(modavgresults2, digits = 4)
 |vor:pc1     | -0.0002| 0.5578| 0.0000| 0.0002|
 |vor:pc2     |  0.0014| 0.9984| 0.0000| 0.0004|
 
-Excellent! I had to use `w.y` as the name of the weight beause the 2nd `left_join()` creates two columns called `w.x` and `w.y` because the name is the same between the two input data.frames. That's OK, I think. 
+Excellent! I had to use `w.y` as the name of the weight beaus the 2nd `left_join()` creates two columns called `w.x` and `w.y` because the name is the same between the two input data.frames. That's OK, I think. 
 
 I was wondering if this is really better than my old style using a list of formulas, a list of fitted models, and package `AICcmodavg`. Part of the reason the above looks so awful is that I tried alot of things that didn't work, and I left the code in there for the sake of honesty! There's another reason too -- `modavg()` won't do the type of averaging that I prefer. It also only does a single parameter at a time, and in the case of this model set it would flat out refuse to do what I've done here because of the interaction terms. Using the approach I've just tried here all the terms get done, and I don't have to think about keeping things lined up properly. 
 
