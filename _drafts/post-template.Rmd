@@ -5,8 +5,12 @@ published: true
 tags: [keyword1, keyword2] 
 ---
 
+The first paragraph will appear as a summary on the main page.
+
+This is the second paragraph. Here's where the link to all the code is as a footnote.[^allthecode]
+
 ```{r setup, echo=FALSE, include=FALSE}
 # load necessary packages here
 ```
 
-All the code for this post, including that not shown, [can be found here](github.com/atyre2/atyre2.github.io/_drafts/post-template.Rmd).
+[^allthecode]: All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/blob/master/_drafts/post-template.Rmd).
