@@ -1,0 +1,48 @@
+--- 
+layout: post 
+title:  Why the second largest drop in temperature between May and June doesn't affect the evidence for climate change.
+published: true 
+tags: [climate, philosophy] 
+---
+
+A good friend posted [this link](http://www.christianpost.com/news/global-cooling-why-we-need-politics-out-of-climate-change-science-167173/) 
+to FB. I read the post, did some background reading, and debated whether to write this post or not. I've been writing it in my head anyway, so time to get it out!
+
+I'll preface my remarks by pointing out that I am not a climate scientist. I am an educated observer[^allthecode]. Regardless, Stephen spent many hours explaining conservatism and the bible to me, so I owe it to him to try explaining this! I do care about climate change, both personally and as a driver of ecological systems which ARE my expertise.
+
+```{r setup, echo=FALSE, include=FALSE}
+# load necessary packages here
+```
+
+In the article Bill Mundhausen makes three statements worth thinking about.
+
+1. "Those of you who were alive in the 70's may remember articles in Time Magazine warning the world about an impending ice age."
+2. "The potential warming effects by human activity affecting the biosphere may be completely dwarfed by changes in heat and magnetic wind from the sun that solar scientists study."
+3. "... the unusual warmth of the previous five months was the short term effect of an unusually strong El Niño, not the continuation of long-term, human-induced global warming."
+
+I'll go through each of these individually.
+
+# 70's Ice Age scare
+
+This is something I'd heard before but not pursued. This statement is often thrown about as evidence that climate scientists don't know what they're talking about, or that they change their minds to suit the prevailing political climate, or that things go up and down anyway so why worry? 
+It's true that [the global temperature trend flattened out or even decreased during the middle of the 20th century](http://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.png). So did that have climate science predicting an ice age? This time I resolved to figure out what was going on. 
+
+There is an *awesome* collection of scanned news articles [here](https://stevengoddard.wordpress.com/1970s-ice-age-scare/), and a similar list with references [here](http://www.populartechnology.net/2013/02/the-1970s-global-cooling-alarmism.html). With a couple exceptions on the first page, these are all media stories, not peer-reviewed publications. A new ice-age made good headlines at least! What were scientists writing at the time? There's a good summary [here](https://www.skepticalscience.com/ice-age-predictions-in-1970s-intermediate.htm), including a reference to a peer-reviewed review of the science at the time. Between 1965 and 1979 7 published articles predicted continued cooling. But 42 articles predicted warming! And over 20 articles predicted no systematic change would occur. Scientists were genuinely uncertain about the future of the climate at the time. 
+
+Part of the reason for the uncertainty had to do with a lack of understanding about how two distinct human drivers of climate would interact with each other. On the one hand there were the first decades of evidence that atmospheric $CO_2$ was increasing. On the other hand there were observations of dramatic increases in aerosol emmisions, particularly $SO_2$. Remember acid rain? The same chemicals responsible for acid rain also have a cooling effect on the atmosphere, and those emissions were dramatically increasing in the early 70's. So the scientific uncertainty reflected these competing drivers. $CO_2$ warms the lower atmosphere, while $SO_2$ cools it. The *scientific* articles predicting a new ice age were forecasting the impacts of continued increases in $SO_2$ ([see this scan](https://stevengoddard.files.wordpress.com/2014/02/screenhunter_127-feb-04-04-44.gif) ). Humanity acted to limit $SO_2$ emissions which began declining around 1980. We acted on $SO_2$ because some impacts were more obvious (decreasing pH in surface waters), and the economic costs smaller than reducing $CO_2$ emissions (although still substantial).
+
+So overall the "ice age scare" was a media construction at a time when political discussions were focused on $SO_2$ emissions. It would be interesting to see if those debates stimulated climate scientists to focus more on building long term data records, and to use those data to measure the effects of human and natural drivers on climate change. The available data in the 1970's were quite limited ([see figures at the top](https://stevengoddard.wordpress.com/1970s-ice-age-scare/) ). At that time climate scientists also lacked the most powerful tool for understanding the interacting effects of climate drivers: computational models of the global climate system. Those models play a critical role in addressing the next statement.
+
+# The effects of variation in solar output
+
+Mundhausen's statement that variation in solar output could dwarf the effects of $CO_2$ is following up on recent observations of sunspot activity. Sunspots do vary in frequency and the output of the sun does change alongside it. It could be that the next solar minimum is going to be really severe. I'm not going to try and follow up that science, because it doesn't affect the evidence for human caused climate change. The short answer is because climate change predictions already account for variation in solar output.
+
+Now for the longer answer. Climate scientists use global circulation models, or GCM's, to forecast how the climate will change in the future. A model is just a sophisticated hypothesis, so it should be challenged with data, and climate scientists do that too. There are pretty good global temperture and precipitation datasets for the 20th century. So, start the models back in the past and let them run forward and predict what should have happened in the 20th century. If the model matches well, then you gain confidence in that models ability to predict the future. If it doesn't match well, then you loose confidence in the model. Go back to the drawing board and build a better model. 
+
+But how does that help us address the solar variation question? Here's the great thing about a model. You can leave things out. Leave out variation in solar output -- how does that change the match between the model predictions and observations over the 20th century. Leave out $CO_2$ variation. Does the model match? Put them in one at a time and see which one matches the best. Climate scientists did this, and [Bloomberg has a great animation](http://www.bloomberg.com/graphics/2015-whats-warming-the-world/). The upshot is that all natural factors combined can't explain the observed temperature trend. Aerosols, including $SO_2$ the culprit in the ice age scare, *do* cool the planet, and by quite a lot. $CO_2$ alone leads to too much warming. Put all human factors together and the match is pretty good. Put both human and natural factors together and the match is great. This is the evidence that human $CO_2$ emissions are driving the observed changes in climate.
+
+
+
+I do agree with Mundhausen on this: politics can distort science. Even so, science can inform political debates by predicting how things we care about will change in response to our actions. Science cannot tell us how to trade off those changes against one another.  
+
+[^allthecode]: All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/blob/master/_drafts/climate_post_1.Rmd).
