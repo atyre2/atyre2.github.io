@@ -20,7 +20,7 @@ This was stimulated by a question to my boss who passed it on to me. Here's the 
 
 ## What's the sensitivity?
 
-In the analysis of structured population models, the sensitivity of a matrix element is just the partial derivative of the population growth rate $\lambda$ with respect to that matrix element. So the question is, does this make any sense?
+In the analysis of structured population models, the sensitivity of a matrix element is just the partial derivative of the population growth rate $$\lambda$$ with respect to that matrix element. So the question is, does this make any sense?
 
 $$
 \frac{\partial \lambda}
