@@ -49,6 +49,7 @@ http://www.nature.com/articles/nclimate2938.epdf?referrer_access_token=rO_LAj7Sq
 [Then there's this.](https://www.theguardian.com/environment/2016/aug/16/july-2016-was-worlds-hottest-month-since-records-began-says-nasa?CMP=twt_a-environment_b-gdneco) That says July 2016 was the hottest yet. 
 
 Different datasets.
+
 I do agree with Mundhausen on this: politics can distort science. Even so, science can inform political debates by predicting how things we care about will change in response to our actions. Science cannot tell us how to trade off those changes against one another.  
 
 [^allthecode]: All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/blob/master/_drafts/climate_post_1.Rmd).

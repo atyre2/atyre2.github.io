@@ -159,7 +159,6 @@ table(apply(apply(results[,2:6],1,order,decreasing=TRUE),2,function(x)which(x==1
 
 ```
 
-
 ```{r easyAIC,echo=FALSE}
 ``` 
 
