@@ -41,8 +41,14 @@ Now for the longer answer. Climate scientists use global circulation models, or 
 
 But how does that help us address the solar variation question? Here's the great thing about a model. You can leave things out. Leave out variation in solar output -- how does that change the match between the model predictions and observations over the 20th century. Leave out $CO_2$ variation. Does the model match? Put them in one at a time and see which one matches the best. Climate scientists did this, and [Bloomberg has a great animation](http://www.bloomberg.com/graphics/2015-whats-warming-the-world/). The upshot is that all natural factors combined can't explain the observed temperature trend. Aerosols, including $SO_2$ the culprit in the ice age scare, *do* cool the planet, and by quite a lot. $CO_2$ alone leads to too much warming. Put all human factors together and the match is pretty good. Put both human and natural factors together and the match is great. This is the evidence that human $CO_2$ emissions are driving the observed changes in climate.
 
+http://www.nature.com/articles/nclimate2938.epdf?referrer_access_token=rO_LAj7Squh3f_qt6natqdRgN0jAjWel9jnR3ZoTv0OqExA1EwYluYLwiaayT9ble9FcNagQ1ss5L1V0KiWd-xzbFQjp8p3e-nUsgU7jNuUykRRWZpgMltUfROWf3xSKeGSSY7TvMiWdaeBCmNzlbQKCodQ3ivWje8eZYAs8Dr1uu8L-i3CHt8f_jYiil5eUpRpdxdWDCSCvqts_NYB_l8yUG-b6Qu0dtrZLMnaUyec%3D&tracking_referrer=www.nature.com
 
 
+# what about that drop in temperature?
+
+[Then there's this.](https://www.theguardian.com/environment/2016/aug/16/july-2016-was-worlds-hottest-month-since-records-began-says-nasa?CMP=twt_a-environment_b-gdneco) That says July 2016 was the hottest yet. 
+
+Different datasets.
 I do agree with Mundhausen on this: politics can distort science. Even so, science can inform political debates by predicting how things we care about will change in response to our actions. Science cannot tell us how to trade off those changes against one another.  
 
 [^allthecode]: All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/blob/master/_drafts/climate_post_1.Rmd).

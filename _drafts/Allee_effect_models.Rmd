@@ -1,0 +1,28 @@
+--- 
+layout: post 
+title:  Modelling Allee effects on population growth
+published: false
+tags: [keyword1, keyword2] 
+---
+
+This post inspired by Walter JA‡, Johnson DM & Haynes KJ. In Press. Spatial variation in Allee effects influences patterns of range expansion. Ecography. DOI: 10.1111/ecog.01951.
+
+This is the second paragraph. Here's where the link to all the code is as a footnote.[^allthecode]
+
+```{r setup, echo=FALSE, include=FALSE}
+# load necessary packages here
+```
+
+```{r}
+curve(exp((1-x/100)), from = 0, to = 110)
+abline(h=1)
+abline(v=10)
+curve(exp((1-x/100)*(x-5)/x), add = TRUE, from = 2, to = 110)
+curve(exp((1-x/100)*(x-10)/x), add = TRUE, from = 2, to = 110)
+
+curve(exp((1-x/100)), from = 0, to = 210)
+
+```
+
+
+[^allthecode]: All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/blob/master/_drafts/post-template.Rmd).
