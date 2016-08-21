@@ -165,9 +165,9 @@ ggplot(gala, aes(x = log(Area), y = log(Species))) +
   geom_ribbon(aes(x = log(Area), ymin = plwr, ymax = pupr, y = 0), data = pred.1, alpha = 0.25)
 ```
 
-The lighter grey polygon shows the distribution of observations expected for each value of $log(Area)$
+The lighter grey polygon shows the distribution of observations expected for each value of $$log(Area)$$
 
-6. What is the largest island where you have $\ge 2.5\%$ chance of _observing_ < 55 species?
+6. What is the largest island where you have $$\ge 2.5\%$$ chance of _observing_ < 55 species?
 
 Finally, it is sometimes useful to make a plot on the untransformed scales. There should be an easy way to do this, but it isn't working just now. 
 
