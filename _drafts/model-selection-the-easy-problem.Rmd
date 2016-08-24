@@ -3,35 +3,57 @@ layout: post
 title:  Model selection and the art of evidence I 
 published: true 
 tags: [statistics, model selection] 
+bibliography: references.bib
 ---
 
 ```{r setup, echo=FALSE, include=FALSE}
 # load necessary packages here
 library(xtable)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(purrr)
+library(ggplot2)
 ```
-Science is a reliable way of gaining knowledge about the nature of reality. Ecology in particular is knowledge about the distribution and abundance of organisms. Over the decades that ecology has been practiced as a distinct science there have been at least 2 broad paradigm shifts in how evidence for or against a particular view of reality is accumulated. The latest shift involved the use of Information Theoretic methods of evaluating multiple hypotheses with a given set of data. 
+I think of science as a reliable way of gaining knowledge about the nature of reality. Ecology in particular is knowledge about the distribution and abundance of organisms. Over the decades that ecology has been practiced as a distinct science there have been at least 2 broad paradigm shifts in how evidence for or against a particular view of reality is accumulated. The first shift occurred in the late 1960's with [testing specific hypotheses using statistics][therevolution]. The latest shift involved the use of Information Theoretic methods of evaluating multiple hypotheses with a given set of data. Not everyone is on board with this second shift. 
 
-Breiman (2001) introduced the idea that there are two cultures in statistics - hypothesis testing and prediction. In hypothesis testing, knowledge is built by identifying the simplest hypothesis consistent with a given set of data. This culture focuses on identifying key variables driving a particular response. In contrast, the prediction culture simply aims to predict a response; which variables are important is usually of secondary importance. These two cultures use different statistical tools. Null hypothesis testing is the domain of hypothesis testing, while prediction focuses on measures of predictive performance, especially the ability to predict independent data points. 
+There are many papers on using AIC (cite Richards, arnolds), and other papers evaluating how to use hypothesis testing, but very few papers combining the two approaches. I think this reflects the partisan stance of most statisticians. People are developing information theory, or Bayesian methods, or clinging to frequentist methods. There seem to be few people looking at ecology and asking what is best for ecologists, philosophers be damned. Ecologists have some unique issues with peculiar goals not shared by many other scientists. In particular, fitting observation error models (e.g. mark-recapture, occupancy, N-mixture models) often involves model selection over two distinct processes. There is the process of interest, which is population size, occupancy or survival, and then there is the process of detection. Mixed models are another 2-stage model with variation in both random and fixed effects structures. There is very little guidance on how to proceed in these cases, which means that ecologists start making shit up.[^aside] In particular, a common strategy is to evaluate models for detection or random effect while using a constant model for the ecological process, and then use the top detection/random effects model while evaluating the set of process models. 
+
+What's wrong with that approach, if anything? My expectation is that these 2 stage model selection approaches will badly underestimate the degree of uncertainty associated with the final selected models. Even if the entire set of process models is retained using model averaging, none of the uncertainty associated with selection of the detection model is incorporated into calculations of the unconditional variance. I also don't know how the structure of the two models interacts with the selection process. I imagine a more complex random effects model combined with a particular simple fixed effects model could outperform the combination of the global fixed effects model and a simpler random effect. I just don't know. 
+
+[^aside]: Blogging can be so much more expressive than journal articles! 
+
+Read and comment on the literature in /ecological statistics/readings/p values
+Giam and olden 2015 variable selection uncertainty
+Fieberg and johnson 2015
+Hooten et al 2015 Bayesian model selection 
+Doherty et al 2010 comparison of model selection strategies.
+
+
+A paper by Paul Doherty and friends [-@Doherty2012] for mark recapture modelling is the only guidance for two stage models I am aware of. They described three broad strategies. The $\phi$ first strategy evaluates models for survival while using a global model for capture probability $p$, then uses the top survival model while evaluating capture rate. The $p$ first strategy reverses the first strategy. Finally, the "all models" strategy evaluates the entire set of models for both $\phi$ and $p$ simultaneously. They compared these three strategies on estimator bias and precision and measures of variable importance. They concluded that the "all models" strategy was superior in all regards. The extent to which these conclusions apply to other 2 stage models is unknown. In addition, they only used AIC model selection, and did not compare that against other methods for model selection, including doing no model selection at all! Finally, ecologists in general have failed to recognize that there are alternative statistical objectives, and the best tool for achieving one goal may not be the best tool for all.
+
+[therevolution]: https://dynamicecology.wordpress.com/2016/05/23/making-modern-ecology-mercer-award-winners-during-the-1950s-and-1960s/
+
+Leo Breiman [-@breiman2001] introduced the idea that there are two cultures in statistics - hypothesis testing and prediction. In hypothesis testing, knowledge is built by identifying the simplest hypothesis consistent with a given set of data. This culture focuses on identifying key variables driving a particular response. In contrast, the prediction culture simply aims to predict a response; which variables are important is usually of secondary importance. These two cultures use different statistical tools. Null hypothesis testing is the domain of hypothesis testing, while prediction focuses on measures of predictive performance, especially the ability to predict independent data points. 
+
+Frank Harrell [-@Harrell2001] added a 3rd "statistical goal" to prediction and hypothesis testing: effect estimation. That is, estimate the change in a response variable for a given change in a predictor variable. In addition, there should be an estimate of the uncertainty in this effect such as a confidence interval of some sort. I think this goal is particularly important for applied ecology. If we want to choose between two management options an estimate of the effect of each option is exactly what is required. Even if the two options represent different levels of the same predictor variable, the estimated effect size is needed to understand tradeoffs against other objectives. It might appear that estimation is the same goal as hypothesis testing, but agree with Harrell that it is unique. In particular, a hypothesis test is not concerned with accurate estimation of the effect size. Rather the focus is on determining if a given variable or set of variables are statistically significant. Thus we have 3 goals for statistical analysis: prediction, estimation, and hypothesis testing.
 
 Data in science arise from two broad forms - manipulative experiments and observation. The former provides the strongest evidence for causation, because one or two variables are manipulated while holding others constant, or at least randomizing variation in all other variables across the experimental units. In contrast, observation of a response across a range of observational units provides much less evidence in favor of causation, because it is always possible that two observed variables are simply correlated because they both share an unmeasured causal variable. Many sciences, including much of ecology, are forced to rely on observation because the units of interest (e.g. ecosystems, species distributions, animal populations) are simply too extensive in space and/or time to manipulate. 
 
-Combining the two sources of data with the two cultures of statistics provides us with [a 2 way table](#typology). The particular focus of this paper is the top right cell - observational data with the goal of testing hypotheses. Confusion over the proper location in this table results in the inappropriate application of statistical techniques, flawed model selection procedures, and ultimately, compromised scientific inference. 
-```{r table,echo=FALSE,results='asis'}
-data = matrix(c(" ","Observation","Experiment","Prediction","Cross Validation","*","Hypothesis Testing","AIC","Backwards Selection"),nrow=3,ncol=3)
+Combining the two sources of data with the three goals of statistics provides us with [a 2 way table](#typology). I've filled in the table with my thoughts on the most appropriate tool for each combination. I should point out that I am not certain of any of the things I've put in the table. These posts are my way of "thinking out loud". I hope that some readers may have useful insights to contribute. 
+The particular focus of this series of blog posts are the top row of cells - observational data. I think it is important to think about your location in this table. I believe misplacing the goal results in the inappropriate application of statistical techniques, flawed model selection procedures, and ultimately, compromised scientific inference. So come and have a look with me.
 
-datatable = xtable(data,label="typology",caption="The combination of data source and inferential goal yields a 2 x 2 table of commonly used methods. The cell marked with * isn't typically observed.")
+```{r table,echo=FALSE,results='asis'}
+data = matrix(c(" ","Observation","Experiment","Prediction","Cross Validation","*","Estimation","AIC","*","Hypothesis Testing","AIC","Backwards Selection"),nrow=3,ncol=4)
+
+datatable = xtable(data,label="typology",caption="The combination of data source and inferential goal yields a 2 x 3 table of commonly used methods. The cells marked with * are not typically observed.")
 print(datatable,type = "html", include.rownames=FALSE, include.colnames=FALSE,hline.after=c(0,1,nrow(datatable)),caption.placement="top")
-baseline=c(0.5,0.3667,0.233,0.1,0)
 ``` 
 
-## The easy model selection problem
-Imagine a situation with a single, continuous response variable and 5 continuous, independent predictor variables. The predictor variables can be scaled and centered, so can be assumed to be normally distributed with a mean of zero and a variance of one. The relationship between the predictors and the response is always linear and there are no interactions. In this circumstance I can always rank the predictor variables from greatest effect to least effect, and I will number the predictor variables from strongest to weakest. I scale the "effect size" of each predictor relative to the residual error in the model $\sigma_{error}$, for example $\beta_1 = c_1\sigma_{error}$, where $\beta_i$ is the coefficient of the $i^{th}$ predictor. If the response has also been centered and scaled, then the intercept $\beta_0$ will be zero and the residual error will be one. With these definitions, a "scenario" consists only of a vector of $c_i$'s. The baseline scenario will be `r print(baseline,digits=2)`, which means the true model consists of only the first four variables.
 
-There are $m=32$ ($2^5=32$) possible models with 5 linear effect variables. In hypothesis testing mode, the goal is to accurately identify the true model out of the set of possible models. In fact, using AIC does not require that the "true" model is in the set of possible models, but this is the easy problem, after all. Measuring the quality of a model selection procedure could be done is several ways. The weight of the true model is one; the frequency with which the true model is the AIC best model is another. Both of these only work if the true model is in the set of possible models. Another metric is model diversity
-$$
-H_{model}=\sum_{i=1}^m -w_i log(w_i)
-$$
-which is just Shannon-Wiener information calculated using the weights of the models. $e^{H_{model}}$ will have a minimum value of 1 and a maximum value of $log(m)$. This measures the degree of certainty in the conclusion drawn from the model set. This metric does not tell us whether that conclusion is biased however -- I may be very certain about the wrong model. Measuring bias is tricky; for the start, I will look at a calibration curve -- a plot of the fitted values from a model or models against the observations. If all is well, this curve should be a straight line with a slope of one and an intercept of zero. Standardizing the intercept and slope of the calibration curve with the estimated standard errors will provide two metrics that should have means of zero and variances of one if the model selection procedure is producing unbiased conclusions. 
+## The easy model selection problem
+
+Imagine a situation with a single, continuous response variable and 5 continuous, independent predictor variables. The predictor variables can be scaled and centered, so can be assumed to be normally distributed with a mean of zero and a variance of one. The relationship between the predictors and the response is always linear and there are no interactions. In this circumstance I can always rank the predictor variables from greatest effect to least effect, and I will number the predictor variables from strongest to weakest. I scale the "effect size" of each predictor relative to the residual error in the model $\sigma_{error}$, for example $\beta_1 = c_1\sigma_{error}$, where $\beta_i$ is the coefficient of the $i^{th}$ predictor. If the response has also been centered and scaled, then the intercept $\beta_0$ will be zero and the residual error will be one. With these definitions, a "scenario" consists only of a vector of $c_i$'s. The baseline scenario will be `r print(baseline,digits=2)`, which means the true model consists of only the first four variables.[^allthecode]
 
 ```{r easy1,echo=FALSE,fig.cap='A sample dataset from the baseline scenario with $N=2m=64$.'}
 set.seed(123456)
@@ -43,7 +65,9 @@ data=data.frame(Y,X)
 names(data)[2:(length(C)+1)] = paste("X.",1:length(C),sep="")
 return(data)
 }
-N=64
+m = 32
+N=2*m
+baseline=c(0.5,0.3667,0.233,0.1,0)
 data1 = make.data(baseline,N=N)
 pairs(data1,pch=19,col=rgb(0.2,0.2,0.2,0.2))
 ``` 
@@ -56,7 +80,14 @@ lm0.table = xtable(data1.lm0,caption="Output of a linear model with all 5 predic
 print(lm0.table,type = "html", caption.placement="top", html.table.attributes = "id=lm0 border=1")
 ```
 
-Dupont and Balmer (1998) provided formulas to calculate the [power of rejecting the hypothesis that $\beta_1 = 0$ for single linear regression](#fig:powerCurve). This power is only an upper bound for the baseline case which includes the effects of other variables as well. The addition of other variables means that the residual error is actually larger, and hence the power lower, if I fit a single variable model to the same data.     
+There are $m=32$ ($2^5=32$) possible models with 5 linear effect variables. In hypothesis testing mode, the goal is to accurately identify the true model out of the set of possible models. In fact, using AIC does not require that the "true" model is in the set of possible models [@burnham2003model], but this is the easy problem, after all. Measuring the quality of a model selection procedure could be done is several ways. The best metric depends on the goal. For hypothesis testing and AIC we might use the weight of the true model; the frequency with which the true model is the AIC best model is another. Both of these only work if the true model is in the set of possible models. Another metric is model diversity
+$$
+H_{model}=\sum_{i=1}^m -w_i log(w_i)
+$$
+which is just Shannon-Wiener information calculated using the weights of the models. $e^{H_{model}}$ will have a minimum value of 1 and a maximum value of $m$. This measures the degree of certainty in the conclusion drawn from the model set. 
+
+In hypothesis testing we are concerned with the rejecting the null hypothesis $\beta_i = 0$.  Dupont and Balmer [-@Dupont1998589] provided formulas to calculate the [power of rejecting the hypothesis that $\beta_1 = 0$ for single linear regression](#fig:powerCurve). This power is only an upper bound for the baseline case which includes the effects of other variables as well. The addition of other variables means that the residual error is actually larger, and hence the power lower, if I fit a single variable model to the same data.     
+
 ```{r powerCurve,echo=FALSE, fig.cap="Power $(1-\\beta)$ to reject the hypothesis that $\\beta_1 = 0$ for different effect sizes and sample sizes of $m$, $2m$, and $3m$. The red dots indicate the effect sizes in the baseline scenario."}
 v = N-2
 delta = seq(0,.5,0.01)
@@ -72,24 +103,65 @@ power = pt(delta*sqrt(3*N/2)-qt(0.975,v),v) + pt(-delta*sqrt(3*N/2)-qt(0.975,v),
 lines(delta,power,lty=3,lwd=3)
 legend("topleft",bty="n",legend=c("m","2m","3m"),title="Sample Size",lty=c(2,1,3),lwd=3)
 ``` 
-```{r testPower, echo=FALSE, eval=FALSE}
+
+So, another way to evaluate the ability of a model selection procedure is to calculate the frequency with which a particular null hypothesis is rejected. 
+
+The metrics discussed above do not tell us whether that conclusion is biased however -- I may be very certain about the wrong model. Bias is important when the goal is prediction or estimation. For the prediction goal I will look at a calibration curve -- a plot of the fitted values from a model or models against the observations. If all is well, this curve should be a straight line with a slope of one and an intercept of zero. Standardizing the intercept and slope of the calibration curve with the estimated standard errors will provide two metrics that should have means of zero and variances of one if the model selection procedure is producing unbiased predictions. Bias is also an issue for estimation, but in that case we are concerned about the estimated effect differing systematically from the true effect. We can estimate this bias simply as the average difference between the estimated coefficient and the true value.
+
+Finally, I am interested in the precision of the estimated effects and predictions. In general, a model selection procedure that produces more precise estimates and predictions is preferred. However, I also worry about "coverage" -- how does the probability of the true value falling in a confidence interval compare to the nominal probability? 
+
+I'll use four different model selection approaches for each goal. The first is the simplest. Following the recommendation of Harrell [-@Harrell2001] I will simply use the full model with all variables considered. The second procedure is backwards selection; starting with the full model remove terms with the smallest F ratios until all remaining terms have significant F ratios when deleted. For the third and fourth methods I will use AIC in two different ways. The third approach will simply use the AIC selected top model only. Finally I will use the entire model set to test hypotheses, make predictions, and estimate effects in a Multimodel inference framework. 
+
+### Hypothesis testing
+
+For hypothesis testing I want to know how often I reject a null hypothesis of interest. The simplest null is $\beta_i = 0$. I'm also interested in the overall F test -- the probability that at least one of the predictors is significant.
+
+```{r testPower1, echo=FALSE, eval=TRUE}
 set.seed(234561)
-results = matrix(NA,nrow=1000,ncol=6)
+results = matrix(NA,nrow=1000,ncol=7)
 for (i in 1:1000){
   test.lm = lm(Y~X.1+X.2+X.3+X.4+X.5,data=make.data(baseline,N=N))
-  results[i,] = coef(test.lm)/sqrt(diag(vcov(test.lm)))
+  results[i,1:6] = tidy(test.lm)$statistic
+  results[i,7] = glance(test.lm)$statistic
 }
-apply(results,2,function(x)sum(x>qt(0.975,N-2)))
+simPower <- apply(results[,1:6],2,function(x)sum(x>qt(0.975,N-2)))
 # compare to 
+v = N-2
 power = pt(baseline*sqrt(N)-qt(0.975,v),v) + pt(-baseline*sqrt(N)-qt(0.975,v),v)
-floor(power*1000)
+expectedPower <- c(25,floor(power*1000))
+knitr::kable(cbind(simPower,expectedPower))
+``` 
+
+So power for the individual coefficients is pretty good compared to the expectation. The simulated values are a bit low because the expectation is calculated assuming there is a single effect in the model. The overall model was significant `r sum(results[,7]>qf(0.95,6,N-6))` times out of 1000. 
+
+It is worth repeating this exercise for a range of sample sizes. Overall power was excellent for $N = 2m$. So I'll repeat the process for sample sizes from 10 up to $2m$. I'm fitting 6 coefficients, so anything less than 10 is, frankly, ridiculous. But let's see what we get.
+
+```{r samplesizePower, cache = TRUE}
+# first prepare a dataframe with the inputs
+df <- crossing(N=seq(10,2*m,5),Rep=1:1000)
+df <- mutate(df,
+             data = map(N, make.data, C=baseline),
+             fullfit = map(data, function(xx)lm(Y~X.1+X.2+X.3+X.4+X.5, data=xx)))
+df2 <- mutate(df, 
+             statistics = map(fullfit, glance),
+             estimates = map(fullfit, tidy)) %>% 
+  unnest(statistics)
+ggplot(df2, aes(x = factor(N), y = p.value)) + geom_boxplot() + geom_hline(yintercept = 0.05, linetype = 2)
+```
+
+This is essentially the inverse of the power curve for the overall model. Somewhere around 5 times the number of estimated parameters gives a median *p* less than 0.05. That's not as bad as I expected. 
+
+```{r eval=FALSE, echo=FALSE}
 # should be 1,2,3,4,5 
 table(apply(apply(results[,2:6],1,order,decreasing=TRUE),2,paste,sep="",collapse=""))
 # how many times is strongest variable in each position?
 table(apply(apply(results[,2:6],1,order,decreasing=TRUE),2,function(x)which(x==1)))
-``` 
+
+```
 
 ```{r easyAIC,echo=FALSE}
 ``` 
 
-All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/_drafts/model-selection-the-easy-problem.Rmd).
+[^allthecode]: All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/blob/master/_drafts/model-selection-the-easy-problem.Rmd).
+
+## Literature cited
