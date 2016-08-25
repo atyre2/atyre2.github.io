@@ -28,7 +28,9 @@ Giam and olden 2015 variable selection uncertainty
 Fieberg and johnson 2015
 Hooten et al 2015 Bayesian model selection 
 Doherty et al 2010 comparison of model selection strategies.
-
+Cade 2015 muddled multimodel inference
+Lukacs etal 2010 model selection bias and freedman's paradox.
+Paper by fahrig and coauthors on effects of multicollinearity.
 
 A paper by Paul Doherty and friends [-@Doherty2012] for mark recapture modelling is the only guidance for two stage models I am aware of. They described three broad strategies. The $\phi$ first strategy evaluates models for survival while using a global model for capture probability $p$, then uses the top survival model while evaluating capture rate. The $p$ first strategy reverses the first strategy. Finally, the "all models" strategy evaluates the entire set of models for both $\phi$ and $p$ simultaneously. They compared these three strategies on estimator bias and precision and measures of variable importance. They concluded that the "all models" strategy was superior in all regards. The extent to which these conclusions apply to other 2 stage models is unknown. In addition, they only used AIC model selection, and did not compare that against other methods for model selection, including doing no model selection at all! Finally, ecologists in general have failed to recognize that there are alternative statistical objectives, and the best tool for achieving one goal may not be the best tool for all.
 
