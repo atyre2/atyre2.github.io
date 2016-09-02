@@ -1,0 +1,89 @@
+--- 
+layout: post 
+title:  Should I use sum-to-zero contrasts? 
+published: true 
+tags: [keyword1, keyword2] 
+---
+
+A sum-to-zero contrast codes a categorical variable as deviations from a grand mean. Social scientists use them extensively. Should ecologists?
+
+Sum-to-zero contrasts are conceptually similar to centering a continuous variable by subtracting the mean from your predictor variable prior to analysis. Discussions of centering often end up conflated with *scaling*, which is dividing your predictor variable by a constant, usually the standard deviation, prior to analysis. I understand that *always scaling* covariates prior to regression analysis is controversial advice. See for example [Andrew Gelman's blogpost and comments](http://andrewgelman.com/2009/07/11/when_to_standar/), or many crossvalidated questions [such as this one](http://stats.stackexchange.com/q/29781/12258) which has links to many others. There is a good reference as well as some useful discussion in the comments of [this question](http://stats.stackexchange.com/questions/179732/motivation-to-center-continuous-predictor-in-multiple-regression-for-sake-of-mul). I want to ask *only about centering*, and in particular discuss the effects of sum to zero contrasts for categorical variables and interactions.[^allthecode]
+
+```{r setup, echo=FALSE, include=FALSE}
+# load necessary packages here
+```
+
+Here is my summary of the pros and cons of centering drawn from those references above.[^CVpost]
+
+* Centering continuous variables eliminates collinearity between 
+    interaction and polynomial terms and the individual covariates 
+    that make them up.
+* Centering does not affect inference about the covariates.
+* Centering can improve the interpretability of the coefficients in
+    a regression model, particularly because the intercept
+    represents the value of the response at the mean of the 
+    predictor variables.
+* Predicting out of sample data with a model fitted to centered 
+    data must be done carefully because the center of the out of
+    sample data will be different from the fitted data.
+* There may be some constant value other than the sample mean
+    that makes more sense based on domain knowledge.
+
+To make the discussion concrete, let me demonstrate with an example of the interaction between a continuous covariate and a categorical one. In the following I refer to the effect of individual covariates outside the interaction as the "simple effect" of that covariate.
+
+
+```{r}
+    data(iris)
+    m0 <- lm(Sepal.Width~Sepal.Length*Species,data=iris)
+    (summary_m0 <- summary(m0))
+
+```
+
+The intercept of this model isn't directly interpretable because it gives the average width at a length of zero, which is impossible. In addition, both the intercept and simple effect of length represent the change in width for only one species, setosa. Centering the continuous variable gives us
+
+
+```{r}
+    iris$cSepal.Length <- scale(iris$Sepal.Length,center=TRUE,scale=TRUE)
+    m1 <- lm(Sepal.Width~cSepal.Length*Species,data=iris)
+    (summary_m1 <- summary(m1))
+
+```
+
+Although the coefficients change because now the model estimates the differences between the species at the mean length, the t-statistics for the continuous covariate, including the interaction terms, do not change. The t-statistics for the intercept and simple effect of species do change (see Q1 below).
+
+```{r}
+    zapsmall(summary_m1$coefficients[,3] - summary_m0$coefficients[,3])
+```
+
+
+What happens if we use sum to zero contrasts for species?
+
+
+```{r}
+    iris$szSpecies <- iris$Species
+    contrasts(iris$szSpecies) <- contr.sum(3)
+    m2 <- lm(Sepal.Width~cSepal.Length*szSpecies,data=iris)
+    (summary_m2 <- summary(m2))
+
+```
+
+I can now directly interpret the intercept as the average width at the average length, averaged over species. Similarly the simple effect of length as the change in width averaged across species. This seems like a very useful set of coefficients to look at, particularly if my categorical covariate has many levels. 
+
+I have seen assertions in some papers (particularly from social sciences), that using sum to zero contrasts (also called effects coding, I believe), allows the direct interpretation of lower order terms in an ANOVA table even in the presence of interactions. 
+
+```{r}
+    anova(m2) # doesn't matter which model I use
+```
+
+If so, in this case I could say "Sepal Width differs significantly between species." 
+
+Here are my direct questions
+
+1. Is the assertion that centering doesn't affect inference  limited to the case without interactions? (I don't believe so because the ANOVA tables don't change, but the t-statistics do?)
+2. Can I interpret the intercept and simple effect of Length as averages over Species?
+3. Is there a good english language interpretation of the estimated coefficients in a sum to zero contrast, and interactions of that with continuous predictor variables?
+4. Does using sum to zero contrasts really get around the principle of marginality?
+
+[^allthecode]: All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/blob/master/_drafts/sum-to-zero-contrasts.Rmd).
+
+[^CVpost]: This stuff first appeared [as a question on CrossValidated](http://stats.stackexchange.com/questions/188852/centering-in-the-presence-of-interactions-with-categorical-predictors), but received no attention. 
