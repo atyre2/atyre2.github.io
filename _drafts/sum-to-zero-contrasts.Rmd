@@ -79,6 +79,6 @@ If so, in this case I could say "Sepal Width differs significantly between speci
 
 Explaining treatment contrasts to students is a pain. I'm not sure that these are any easier, but it certainly seems like there are good arguments for centering and using sum-to-zero contrasts more widely in Ecology.
 
-[^allthecode]: All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/blob/master/_drafts/sum-to-zero-contrasts.Rmd).
+[^allthecode]: All the code for this post, including that not shown, [can be found here](https://github.com/atyre2/atyre2.github.io/raw/master/_drafts/sum-to-zero-contrasts.Rmd).
 
 [^CVpost]: This stuff first appeared [as a question on CrossValidated](http://stats.stackexchange.com/questions/188852/centering-in-the-presence-of-interactions-with-categorical-predictors), but received no attention. 
