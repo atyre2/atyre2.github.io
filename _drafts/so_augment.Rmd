@@ -1,0 +1,35 @@
+---
+title: "so_post_augment"
+author: "Drew Tyre"
+date: "September 3, 2016"
+output: 
+  md_document:
+    variant: markdown_strict+autolink_bare_uris
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I'm missing something so fundamental here -- why does augment work with one model but not another?
+
+```{r, error = TRUE, tidy = TRUE}
+data(iris)
+library(broom)
+
+iris$cSepal.Length <- iris$Sepal.Length - mean(iris$Sepal.Length)
+nd <- expand.grid(Sepal.Length = seq(4, 8, 0.1),
+                  Species = factor(levels(iris$Species)))
+nd$cSepal.Length <- nd$Sepal.Length - mean(iris$Sepal.Length)
+
+m0 <- lm(Sepal.Width~Sepal.Length*Species,data=iris)
+pred.0 <- augment(m0, newdata = nd)    
+m1 <- lm(Sepal.Width~cSepal.Length*Species,data=iris)
+pred.1 <- augment(m1, newdata = nd)
+```
+
+```{r}
+sessionInfo()
+```
+
