@@ -2,6 +2,7 @@
 layout: post 
 title:  Statistical training in ecology
 published: true 
+comments: true
 tags: [teaching, statistics] 
 ---
 
