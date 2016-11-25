@@ -2,6 +2,7 @@
 layout: post 
 title:  Testing disqus comments 
 published: true 
+comments: true
 tags: [keyword1, keyword2] 
 ---
 
