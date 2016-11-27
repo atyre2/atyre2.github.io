@@ -1,7 +1,7 @@
 --- 
 layout: post 
 title:  Diversity matters. Everywhere. 
-published: false 
+published: true 
 comments: true
 tags: [politics] 
 ---
@@ -18,7 +18,7 @@ Reflecting on her time in graduate school, Anonymous says
 
 I've heard this sentiment from other conservative colleagues. I think it is a terrible outcome for universities to reject ideological diversity across disciplines. We celebrate diversity in race, gender, and ecosystems. Why not diversity of political opinions?
 
-At the same time, painting all liberals as people who insist "you can't say that" without explaining why is the ecological fallacy all over again. Yes, there are people who insist I shouldn't say "Gay people shouldn't get married.", without really thinking through *why* I shouldn't say that. Not all liberals haven't thought about it. But most people don't have the energy or time to work out the details of moral reasoning. They buy a worldview as a package. Conservatives do this too -- it is simply a consequence of our bounded rationality. Expecting everyone on both sides of the political spectrum to be deeply conversant in moral reasoning is, well, unreasonable. 
+At the same time, painting all liberals as people who insist "you can't say that" without explaining why is the ecological fallacy all over again. Yes, there are people who insist I shouldn't say "Gay people shouldn't get married.", without really thinking through *why* I shouldn't say that. Some liberals *have* thought through why. But most people don't have the energy or time to work out the details of moral reasoning. They buy a worldview as a package. Conservatives do this too -- it is simply a consequence of our bounded rationality. Expecting everyone on both sides of the political spectrum to be deeply conversant in moral reasoning is, well, unreasonable. 
 
 It is uncomfortable to be somewhere people don't share your political views. In the gym yesterday I overheard "You're too nice to be a liberal!". As I sweated away on the bike I wondered what she would think of an atheist immigrant liberal. "If you're not with God you're with Satan!" Ulp. Good thing I kept my mouth shut. I get it. Having different thoughts from the people around you is uncomfortable. Universities should do better. 
 
@@ -26,7 +26,7 @@ Anonymous says that her and her husband
 
 > ... endeavor to get our points across by subtly questioning our opponents’ assumptions, while letting them take things to their logical conclusion if they are open-minded enough to do so.
 
-Why is that a bad thing to take this approach? It's brilliant! Examining our base assumptions about moral reasoning is a fantastic way to build a deeper understanding of the other. I had many great conversations with a conservative, deeply religious colleague that took this form. I learned a great deal.
+Why is taking this approach a bad thing? It's brilliant! Examining our base assumptions about moral reasoning is a fantastic way to build a deeper understanding of the other. I had many great conversations with a conservative, deeply religious colleague that took this form. I learned a great deal.
 
 In conclusion Anonymous writes
 
