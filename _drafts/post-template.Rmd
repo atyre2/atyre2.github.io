@@ -1,7 +1,8 @@
 --- 
 layout: post 
 title:  template 
-published: true 
+published: false 
+comments: true
 tags: [keyword1, keyword2] 
 ---
 
