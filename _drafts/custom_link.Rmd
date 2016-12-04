@@ -1,0 +1,79 @@
+--- 
+layout: post 
+title:  Accounting for exposure days 
+published: false 
+comments: true
+tags: [statistics, R, ecology] 
+---
+
+Irregular data collection intervals are an annoying feature of much ecological data. Nest survival data in particular. Terry Schaefer showed us the way.
+
+This is the second paragraph. Here's where the link to all the code is as a footnote.[^allthecode]
+
+```{r setup, echo=FALSE, include=FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(RColorBrewer)
+library(GGally)
+library(pander)
+library(broom)
+library(factoextra)
+library(lme4)
+
+# load necessary packages here
+```
+
+```{r}
+#####making modified link function 
+
+logexp <- function(days = 1)
+{
+  linkfun <- function(mu) qlogis(mu^(1/days))
+  linkinv <- function(eta) plogis(eta)^days
+  mu.eta <- function(eta) days * plogis(eta)^(days-1) * binomial()$mu.eta(eta)
+  valideta <- function(eta) TRUE
+  link <- paste0("logexp(", days, ")")
+  structure(list(linkfun = linkfun, linkinv = linkinv,
+                 mu.eta = mu.eta, valideta = valideta, name = link),
+            class = "link-glm")
+}
+
+logexp_bad <- function(days = 1)
+{
+  linkfun <- function(mu) qlogis(mu^(1/days))
+  linkinv <- function(eta) plogis(eta)^days
+  mu.eta <- function(eta) days * plogis(eta)^(days-1) * binomial()$mu_eta
+  valideta <- function(eta) TRUE
+  link <- paste0("logexp(", days, ")")
+  structure(list(linkfun = linkfun, linkinv = linkinv,
+                 mu.eta = mu.eta, valideta = valideta, name = link),
+            class = "link-glm")
+}
+
+binomial(logexp(rep(3,100)))
+
+# simulate some data with different exposure days
+
+abc <- data.frame(x=rnorm(100),
+           days=sample(1:5, 100, replace=TRUE))
+abc <- mutate(abc,
+              p=plogis(x),
+              p_days=1-(1-p)^days,
+              y = rbinom(100, 1, p_days))
+
+glm(y~x, data=abc, family=binomial(link=logexp_bad(days=abc$days))) # fails
+glm(y~x, data=abc, family=binomial(link=logexp(days=abc$days))) # works
+
+library(broom)
+abc.fits <- augment(abc.glm)
+abc.fits$days <- abc$days
+ggplot(abc.fits, aes(x=x,y=pp)) + 
+  geom_line() + 
+  geom_point(aes(y=y,size=days))
+
+abc.fits$pp <- predict(abc.glm, type="response")
+```
+
+
+[^allthecode]: All the code for this post, including that not shown, [can be found here](https::/github.com/atyre2/atyre2.github.io/raw/master/_drafts/post-template.Rmd).
