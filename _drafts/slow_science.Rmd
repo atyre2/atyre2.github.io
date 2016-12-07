@@ -1,9 +1,9 @@
 --- 
 layout: post 
 title:  Slow Science
-published: false 
+published: true 
 comments: true
-tags: [keyword1, keyword2] 
+tags: [Higher Ed] 
 ---
 
 I've heard a number of calls for faculty to slow down, think, and write. [This is the latest](http://www.chronicle.com/article/Helping-Professors-Find-Time/238569), by Allison Adams from Emory University. I'm trying, but it's hard.
