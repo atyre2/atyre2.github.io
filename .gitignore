@@ -1,4 +1,5 @@
 _site
+_cache
 .sass-cache
 .jekyll-metadata
 .Rproj.user
