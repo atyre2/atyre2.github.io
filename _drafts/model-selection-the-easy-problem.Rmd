@@ -1,9 +1,10 @@
 --- 
 layout: post 
 title:  Model selection and the art of evidence I 
-published: true 
+published: false 
 tags: [statistics, model selection] 
 bibliography: references.bib
+output: github_document
 ---
 
 ```{r setup, echo=FALSE, include=FALSE}
@@ -48,6 +49,8 @@ Combining the two sources of data with the three goals of statistics provides us
 The particular focus of this series of blog posts are the top row of cells - observational data. I think it is important to think about your location in this table. I believe misplacing the goal results in the inappropriate application of statistical techniques, flawed model selection procedures, and ultimately, compromised scientific inference. So come and have a look with me.
 
 ```{r table,echo=FALSE,results='asis'}
+# need to create this here.
+baseline=c(0.5,0.3667,0.233,0.1,0)
 data = matrix(c(" ","Observation","Experiment","Prediction","Cross Validation","*","Estimation","AIC","*","Hypothesis Testing","AIC","Backwards Selection"),nrow=3,ncol=4)
 
 datatable = xtable(data,label="typology",caption="The combination of data source and inferential goal yields a 2 x 3 table of commonly used methods. The cells marked with * are not typically observed.")
@@ -71,7 +74,7 @@ return(data)
 }
 m = 32
 N=2*m
-baseline=c(0.5,0.3667,0.233,0.1,0)
+
 data1 = make.data(baseline,N=N)
 pairs(data1,pch=19,col=rgb(0.2,0.2,0.2,0.2))
 ``` 
@@ -140,7 +143,7 @@ So power for the individual coefficients is pretty good compared to the expectat
 
 It is worth repeating this exercise for a range of sample sizes. Overall power was excellent for $N = 2m$. So I'll repeat the process for sample sizes from 10 up to $2m$. I'm fitting 6 coefficients, so anything less than 30 is, frankly, ridiculous. But let's see what we get.
 
-```{r samplesizePower, cache = TRUE}
+```{r samplesizePower, eval=FALSE, cache = TRUE}
 # first prepare a dataframe with the inputs
 df <- crossing(N=seq(10,2*m,5),Rep=1:1000)
 df <- mutate(df,
