@@ -1,0 +1,20 @@
+--- 
+layout: post 
+title:  I am biased in hiring 
+published: false 
+comments: true
+tags: [higher ed] 
+---
+
+I've been thinking about [how higher education needs to seek intellectual diversity](http://atyre2.github.io/2016/11/27/idealogical_diversity.html) in addition to diversity of race, gender, etc. It is important that we hire people from a range of political backgrounds to [avoid becoming liberal echo chambers](http://www.nytimes.com/2016/12/10/opinion/sunday/the-dangers-of-echo-chambers-on-campus.html). I do have a remaining bias however. 
+
+I can always rely on my friend Stephen to find the weak spot in any argument I make about social and political issues. In this case, he asked if I had changed my mind about hiring creation scientists. My short answer was no, I haven't. But given that I had just said we should hire for intellectual diversity I feel like a longer explanation is in order. 
+
+I recently chaired a search committee for a new faculty member in our unit. I actually can't tell you what the religious beliefs or lack thereof are for any applicant. I didn't ask, and they didn't offer. So maybe I did hire a creation scientist! Their religious beliefs were irrelevant to whether or not they can do the job we want them to do. What is relevant is whether they are using appropriate tools for their science, and teaching what we know and don't know about the science. Let's use a specific example.
+
+Lots of people, including me, got very excited last week about [a bit of dinosaur tail preserved in amber](http://news.nationalgeographic.com/2016/12/feathered-dinosaur-tail-amber-theropod-myanmar-burma-cretaceous/). Why it is exciting contribution to our understanding of dinosaurs and birds is irrelevant here. What I want to focus on is how we know that bit of amber is 99 million years old. 
+
+Digging around in the scientific article and following citations there, I found that the dates for those amber chunks were arrived at by examining the insects preserved in them. We know the periods of time where those particular ants, flies, and plants are found in other fossil situations. So, the only way those insects could be in those bits of amber is because the amber formed 90 - 100 million years ago. 
+
+But how do we know the age of those fossils? I'm not going to follow that path because it leads into a long chain of conclusions supported by other conclusions. The point is the age of that fossil tail is dependent on many, many other bits of science far outside evolution. As an ecologist I don't need to follow that chain all the way to the end. I can, indeed must, at some point trust the conclusions of other people working in other fields. 
+
