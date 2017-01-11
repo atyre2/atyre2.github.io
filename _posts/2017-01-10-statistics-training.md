@@ -1,7 +1,7 @@
 --- 
 layout: post 
 title:  Statistics training
-published: false 
+published: true 
 comments: true
 tags: [higher ed, computation] 
 ---
