@@ -7,15 +7,7 @@ tags: [statistics, model selection]
 bibliography: references.bib
 ---
 
-```{r setup, echo=FALSE, include=FALSE}
-# load necessary packages here
-library(xtable)
-library(dplyr)
-library(tidyr)
-library(broom)
-library(purrr)
-library(ggplot2)
-```
+
 I think of science as a reliable way of gaining knowledge about the nature of reality. Ecology in particular is knowledge about the distribution and abundance of organisms. How do we decide whether a particular view of ecological reality is, at least for the moment, correct or not?
 
 Over the decades that ecology has been practiced as a distinct science there have been at least 2 broad paradigm shifts in how evidence for or against a particular view of reality is accumulated. The first shift occurred in the late 1960's with [testing specific hypotheses using statistics][therevolution]. The latest shift involved the use of Information Theoretic methods of evaluating multiple hypotheses with a given set of data. Not everyone is on board with this second shift. [^allthecode]
@@ -45,14 +37,14 @@ Data in science arise from two broad forms - manipulative experiments and observ
 Combining the two sources of data with the three goals of statistics provides us with [a 2 way table](#typology). I've filled in the table with my thoughts on the most appropriate tool for each combination. I should point out that I am not certain of any of the things I've put in the table. These posts are my way of "thinking out loud". I hope that some readers may have useful insights to contribute. 
 The particular focus of this series of blog posts are the top row of cells - observational data. I think it is important to think about your location in this table. I believe misplacing the goal results in the inappropriate application of statistical techniques, flawed model selection procedures, and ultimately, compromised scientific inference. So come and have a look with me.
 
-```{r table,echo=FALSE,results='asis'}
-# need to create this here.
-baseline=c(0.5,0.3667,0.233,0.1,0)
-data = matrix(c(" ","Observation","Experiment","Prediction","Cross Validation","*","Estimation","AIC","*","Hypothesis Testing","AIC","Backwards Selection"),nrow=3,ncol=4)
-
-datatable = xtable(data,label="typology",caption="The combination of data source and inferential goal yields a 2 x 3 table of commonly used methods. The cells marked with * are not typically observed.")
-print(datatable,type = "html", include.rownames=FALSE, include.colnames=FALSE,hline.after=c(0,1,nrow(datatable)),caption.placement="top")
-``` 
+<!-- html table generated in R 3.3.2 by xtable 1.8-2 package -->
+<!-- Thu Jan 26 10:55:18 2017 -->
+<table border=1>
+<caption align="top"> The combination of data source and inferential goal yields a 2 x 3 table of commonly used methods. The cells marked with * are not typically observed. </caption>
+  <tr> <td>   </td> <td> Prediction </td> <td> Estimation </td> <td> Hypothesis Testing </td> </tr>
+   <tr> <td> Observation </td> <td> Cross Validation </td> <td> AIC </td> <td> AIC </td> </tr>
+  <tr> <td> Experiment </td> <td> * </td> <td> * </td> <td> Backwards Selection </td> </tr>
+   </table>
 
 
 

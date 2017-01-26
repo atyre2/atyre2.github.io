@@ -1,0 +1,23 @@
+--- 
+layout: post 
+title:  Model selection part N
+published: false 
+comments: true
+tags: [keyword1, keyword2] 
+---
+Read and comment on the literature in /ecological statistics/readings/p values
+Giam and olden 2015 variable selection uncertainty
+Fieberg and johnson 2015
+Hooten et al 2015 Bayesian model selection 
+Doherty et al 2010 comparison of model selection strategies.
+Cade 2015 muddled multimodel inference
+Lukacs etal 2010 model selection bias and freedman's paradox.
+Paper by fahrig and coauthors on effects of multicollinearity.
+
+This is the second paragraph. Here's where the link to all the code is as a footnote.[^allthecode]
+
+```{r setup, echo=FALSE, include=FALSE}
+# load necessary packages here
+```
+
+[^allthecode]: All the code for this post, including that not shown, [can be found here](https://github.com/atyre2/atyre2.github.io/raw/master/_drafts/post-template.Rmd).
