@@ -1,7 +1,7 @@
 --- 
 layout: post 
 title:  Model selection and the art of evidence I 
-published: false 
+published: true 
 comments: true
 tags: [statistics, model selection] 
 bibliography: references.bib
@@ -38,7 +38,7 @@ Combining the two sources of data with the three goals of statistics provides us
 The particular focus of this series of blog posts are the top row of cells - observational data. I think it is important to think about your location in this table. I believe misplacing the goal results in the inappropriate application of statistical techniques, flawed model selection procedures, and ultimately, compromised scientific inference. So come and have a look with me.
 
 <!-- html table generated in R 3.3.2 by xtable 1.8-2 package -->
-<!-- Thu Jan 26 10:55:18 2017 -->
+<!-- Thu Jan 26 10:56:23 2017 -->
 <table border=1>
 <caption align="top"> The combination of data source and inferential goal yields a 2 x 3 table of commonly used methods. The cells marked with * are not typically observed. </caption>
   <tr> <td>   </td> <td> Prediction </td> <td> Estimation </td> <td> Hypothesis Testing </td> </tr>

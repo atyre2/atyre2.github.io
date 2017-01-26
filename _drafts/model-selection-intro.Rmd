@@ -1,7 +1,7 @@
 --- 
 layout: post 
 title:  Model selection and the art of evidence I 
-published: false 
+published: true 
 comments: true
 tags: [statistics, model selection] 
 bibliography: references.bib
