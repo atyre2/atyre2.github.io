@@ -1,7 +1,7 @@
 --- 
 layout: post 
 title:  Accounting for exposure days 
-published: false 
+published: true 
 comments: true
 tags: [statistics, R, ecology] 
 bibliography: references.bib
