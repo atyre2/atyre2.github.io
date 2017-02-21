@@ -83,11 +83,12 @@ Now I want 20 replicates of that model. This is one place where functional progr
 
 ```{r}
 inputs <- map(rep(21, times=20), rnorm, mean=1.25, sd=0.2)
-b_0 <- rnorm(21, 1.25, 0.2)
-M3 <- logisticpop(1, t = 0:20, b_0 = b_0)
+M4 <- map_df(inputs, ~logisticpop(N0 = 1, t = 0:20, b_0 = .x), .id = "rep")
 ggplot() + 
-  geom_line(aes(x=t, y=N), data = M1) + 
-  geom_line(aes(x=t, y=N), data = M3, color="red")
+  geom_line(aes(x=t, y=N, group = rep), data = M4, color="red") +
+  geom_line(aes(x=t, y=N), data = M1, size=2) 
 ```
+
+So that's my best shot. So far it seems to be working for students to give them the function and have the manipulate the parameters. But lot's of time left in the semester. Their next assignment is to use a similar function to predict population growth in their flour beetle (*Tribolium confusum*) populations. 
 
 [^allthecode]: All the code for this post, including that not shown, [can be found here](https://github.com/atyre2/atyre2.github.io/raw/master/_drafts/whats-the-best-logistic-model.Rmd).
