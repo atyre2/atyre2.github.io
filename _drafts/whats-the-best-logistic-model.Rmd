@@ -1,7 +1,7 @@
 --- 
 layout: post 
 title:  What's the best way to implement a logisitic model in R?
-published: false 
+published: true
 comments: true
 tags: [keyword1, keyword2] 
 ---

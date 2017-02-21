@@ -1,7 +1,7 @@
 --- 
 layout: post 
 title:  What's the best way to implement a logisitic model in R?
-published: false 
+published: true
 comments: true
 tags: [keyword1, keyword2] 
 ---
@@ -58,7 +58,7 @@ as well as vector of times.
     ggplot() + 
       geom_line(aes(x=t, y=N), data = M1)
 
-![](/whats-the-best-logistic-model_files/figure-markdown_strict/unnamed-chunk-19-1.png)
+![](/whats-the-best-logistic-model_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
 This structure gives me the ability to predict the effects of management
 actions by providing a vector of birth or death rate parameters. For
@@ -71,7 +71,7 @@ intercept of the per capita birth rate could be decreasing.
       geom_line(aes(x=t, y=N), data = M1) + 
       geom_line(aes(x=t, y=N), data = M2, color="red")
 
-![](/whats-the-best-logistic-model_files/figure-markdown_strict/unnamed-chunk-20-1.png)
+![](/whats-the-best-logistic-model_files/figure-markdown_strict/unnamed-chunk-2-1.png)
 
 If I want a stochastic model with environmental stochasticity, I simply
 provide a vector drawn from random numbers.
@@ -82,7 +82,7 @@ provide a vector drawn from random numbers.
       geom_line(aes(x=t, y=N), data = M1) + 
       geom_line(aes(x=t, y=N), data = M3, color="red")
 
-![](/whats-the-best-logistic-model_files/figure-markdown_strict/unnamed-chunk-21-1.png)
+![](/whats-the-best-logistic-model_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
 Now I want 20 replicates of that model. This is one place where
 functional programming comes in. I'll make a list of b\_0 vectors, then
@@ -95,7 +95,7 @@ the results as a dataframe.
       geom_line(aes(x=t, y=N, group = rep), data = M4, color="red") +
       geom_line(aes(x=t, y=N), data = M1, size=2) 
 
-![](/whats-the-best-logistic-model_files/figure-markdown_strict/unnamed-chunk-22-1.png)
+![](/whats-the-best-logistic-model_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
 So that's my best shot. So far it seems to be working for students to
 give them the function and have the manipulate the parameters. But lot's
