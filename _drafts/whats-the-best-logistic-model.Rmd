@@ -1,9 +1,9 @@
 --- 
 layout: post 
-title:  What's the best way to implement a logisitic model in R?
+title:  What's the best way to implement the logistic model in R?
 published: true
 comments: true
-tags: [keyword1, keyword2] 
+tags: [teaching, models] 
 ---
 
 I'm teaching my population dynamics class using R for the first time. I want the students to use a simple logistic population model to make predictions about how population size will respond to different management actions. So, I need to figure out the best way to implement a discrete time, logisitic growth model in R.
