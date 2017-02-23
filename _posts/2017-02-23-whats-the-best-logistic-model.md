@@ -12,10 +12,7 @@ EDIT: I've added some more thoughts based on twitter discussions with @pixxpih. 
 
 I have students think through the logistic model with graphs of per capita birth and death rates. I don't expect them to be able to write a function for the model from scratch, so I'm going to give them the code. I'm putting it in a function instead of just doing a for loop in a script to facilitate using functional programming tools (e.g. `purrr`). I want the function to return a `data.frame` ready for plotting by `ggplot2`. Here is the function I've come up with. If anyone is aware of an implementation of this model I'd love to hear about it![^allthecode]
 
-```{r setup, echo=FALSE, include=FALSE}
-# load necessary packages here
-library(tidyverse)
-```
+
 
 
 We will use the form of the logistic that uses explicit birth and death rates:
@@ -26,7 +23,8 @@ $$
 
 This model will have 5 parameters: *b_0, b_1, d_0, d_1, N_0* as well as vector of times.
 
-```{r logfundef, echo=TRUE}
+
+```r
 logisticpop <- function(N0, t = 1, b_0 = 1.25,
                         b_1 = -0.01,
                         d_0 = 0.5,
@@ -52,18 +50,21 @@ logisticpop <- function(N0, t = 1, b_0 = 1.25,
                     d_1 = d_1,
                     N = N))
 }
-
 ```
 
-```{r}
+
+```r
 M1 <- logisticpop(1, t = 0:20)
 ggplot() + 
   geom_line(aes(x=t, y=N), data = M1)
 ```
 
+![plot of chunk unnamed-chunk-1](/figure/whats-the-best-logistic-model/unnamed-chunk-1-1.png)
+
 This structure gives me the ability to predict the effects of management actions by providing a vector of birth or death rate parameters. For example, if habitat quality starts to degrade at t = 10, then the intercept of the per capita birth rate could be decreasing.
 
-```{r}
+
+```r
 b_0 <- c(rep(1.25, times=10),seq(1.2, by=-0.025, length=11))
 M2 <- logisticpop(1, t = 0:20, b_0 = b_0)
 ggplot() + 
@@ -71,9 +72,12 @@ ggplot() +
   geom_line(aes(x=t, y=N), data = M2, color="red")
 ```
 
+![plot of chunk unnamed-chunk-2](/figure/whats-the-best-logistic-model/unnamed-chunk-2-1.png)
+
 If I want a stochastic model with environmental stochasticity, I simply provide a vector drawn from random numbers.
 
-```{r}
+
+```r
 b_0 <- rnorm(21, 1.25, 0.2)
 M3 <- logisticpop(1, t = 0:20, b_0 = b_0)
 ggplot() + 
@@ -81,15 +85,20 @@ ggplot() +
   geom_line(aes(x=t, y=N), data = M3, color="red")
 ```
 
+![plot of chunk unnamed-chunk-3](/figure/whats-the-best-logistic-model/unnamed-chunk-3-1.png)
+
 Now I want 20 replicates of that model. This is one place where functional programming comes in. I'll make a list of b_0 vectors, then use `map_df()` to call my model with each of those vectors and return the results as a dataframe.
 
-```{r}
+
+```r
 inputs <- map(rep(21, times=20), rnorm, mean=1.25, sd=0.2)
 M4 <- map_df(inputs, ~logisticpop(N0 = 1, t = 0:20, b_0 = .x), .id = "rep")
 ggplot() + 
   geom_line(aes(x=t, y=N, group = rep), data = M4, color="red") +
   geom_line(aes(x=t, y=N), data = M1, size=2) 
 ```
+
+![plot of chunk unnamed-chunk-4](/figure/whats-the-best-logistic-model/unnamed-chunk-4-1.png)
 
 So that's my best shot. So far it seems to be working for students to give them the function and have the manipulate the parameters. But lot's of time left in the semester. Their next assignment is to use a similar function to predict population growth in their flour beetle (*Tribolium confusum*) populations. 
 
