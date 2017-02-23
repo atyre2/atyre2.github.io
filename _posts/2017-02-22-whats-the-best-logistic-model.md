@@ -6,9 +6,11 @@ comments: true
 tags: [teaching, models] 
 ---
 
-I'm teaching my population dynamics class using R for the first time. I want the students to use a simple logistic population model to make predictions about how population size will respond to different management actions. So, I need to figure out the best way to implement a discrete time, logisitic growth model in R.
+I'm teaching my population dynamics class using R for the first time. I want the students to use a simple logistic population model to make predictions about how population size will respond to different management actions. So, I need to figure out the best way to implement a discrete time, logistic growth model in R.
 
-I have students think through the logistic model with graphs of per capita birth and death rates. I don't expect them to be able to write a function for the model from scratch, so I'm going to give them the code. I'm putting it in a function instead of just doing a for loop in a script to facilitate using functional programming tools (e.g. `purrr`). Here is the function I've come up with. If anyone is aware of an implementation of this model I'd love to hear about it![^allthecode]
+EDIT: I've added some more thoughts based on twitter discussions with @pixxpih. I also added a bit of discussion of Henry Steven's implementation in [_A primer of Ecology with R_](http://www.springer.com/life+sciences/ecology?SGWID=0-10034-0-0-0).
+
+I have students think through the logistic model with graphs of per capita birth and death rates. I don't expect them to be able to write a function for the model from scratch, so I'm going to give them the code. I'm putting it in a function instead of just doing a for loop in a script to facilitate using functional programming tools (e.g. `purrr`). I want the function to return a `data.frame` ready for plotting by `ggplot2`. Here is the function I've come up with. If anyone is aware of an implementation of this model I'd love to hear about it![^allthecode]
 
 
 
@@ -19,7 +21,7 @@ $$
 N_{t+1} = N_t + (b_0 + b_1 N_t) N_t - (d_0 + d_1 N_t) N_t
 $$
 
-This model will have 5 parameters: $b_0, b_1, d_0, d_1, N_0$ as well as vector of times.
+This model will have 5 parameters: *b_0, b_1, d_0, d_1, N_0* as well as vector of times.
 
 
 ```r
@@ -99,5 +101,9 @@ ggplot() +
 ![plot of chunk unnamed-chunk-4](/figure/whats-the-best-logistic-model/unnamed-chunk-4-1.png)
 
 So that's my best shot. So far it seems to be working for students to give them the function and have the manipulate the parameters. But lot's of time left in the semester. Their next assignment is to use a similar function to predict population growth in their flour beetle (*Tribolium confusum*) populations. 
+
+Henry Steven's `dlogistic()` function is very similar, but doesn't accept vector valued arguments, and doesn't return a `data.frame`. That's largely cosmetic, so the basic idea of packaging the model inside a function to use functional programming tools has occurred to at least one other person! 
+
+@pixxpih suggested separating the *iteration* part of the function from the *transition* part of the function. Karline Soetaert and Peter Hermann do something like this in their book [_A practical guide to ecological modelling_](http://www.springer.com/life+sciences/ecology?SGWID=0-10034-0-0-0). They just used a naked for loop in a script wrapped around the one step transition function. If this worked out well, I think the iteration function could be re-used for different models, reducing the burden on the students to learn new things, and making it clear that iteration is the general task, while the details of the individual model change depending on the task we have. To make that work with functions that parameterize models in different ways I would need to use `...` arguments, and every time I've tried to do that it's ended badly! 
 
 [^allthecode]: All the code for this post, including that not shown, [can be found here](https://github.com/atyre2/atyre2.github.io/raw/master/_drafts/whats-the-best-logistic-model.Rmd).
