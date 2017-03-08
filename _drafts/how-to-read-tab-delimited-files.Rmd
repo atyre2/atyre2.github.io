@@ -11,10 +11,51 @@ The [semester long course from Data Carpentry](http://www.datacarpentry.org/seme
 > Will both of these essentially do the same thing or are there considerations
 > for using one vs. the other?
 
-So that's a good question.[^allthecode]
+So that's a good question. The short answer is yes, they do the same thing. The longer answer is: except when they don't! And those differences *will* break your code.[^allthecode]
 
-```{r setup, echo=FALSE, include=FALSE}
+```{r setup, echo=TRUE, include=FALSE}
 # load necessary packages here
+library(tidyverse)
+```
+
+The first dataset I had the students use [comes from a study of forests in India](http://esapubs.org/archive/ecol/E091/216/). This one is fairly clean and easy.
+
+```{r}
+baser <- read.csv("http://esapubs.org/archive/ecol/E091/216/Macroplot_data_Rev.txt", sep="\t")
+tidyv <- read_tsv("http://esapubs.org/archive/ecol/E091/216/Macroplot_data_Rev.txt")
+class(baser) 
+class(tidyv)
+```
+
+So they're not identical because `readr::read_tsv()` returns a `tbl_df` instead of a data.frame. But the variable names are the same
+
+```{r}
+all.equal(names(baser),names(tidyv))
+```
+
+The main difference between the `tbl_df` and the `data.frame` is that the latter has coerced `PlotID` and `SpCode` to factors:
+
+```{r}
+map_chr(baser, class)
+```
+
+and this doesn't happen in the `tbl_df`
+
+```{r}
+map_chr(tidyv, class)
+```
+
+For the most part that difference isn't going to be noticeable, because most R functions will coerce a character vector to a factor if a factor is what they want. So, if you have nice clean data then you'll get more or less the same thing, or with differences that can mostly be ignored.[^tibbletrouble] 
+
+The second tab delimited dataset the students used comes from [a comparative analysis of avian body sizes](http://www.esapubs.org/archive/ecol/E088/096/avian_ssd_jan07.txt).[^opendata]
+
+```{r}
+baser <- read.csv("http://www.esapubs.org/archive/ecol/E088/096/avian_ssd_jan07.txt", sep="\t")
+tidyv <- read_tsv("http://www.esapubs.org/archive/ecol/E088/096/avian_ssd_jan07.txt")
 ```
 
 [^allthecode]: All the code for this post, including that not shown, [can be found here](https://github.com/atyre2/atyre2.github.io/raw/master/_drafts/how-to-read-tab-delimited-files.Rmd).
+
+[^tibbletrouble]: I've run into [troubles with tibbles](http://atyre2.github.io/2016/04/25/the-trouble-with-tibbles.html) before!
+
+[^opendata]: did I mention how much in love I am with open data? Awesome training opportunities!
