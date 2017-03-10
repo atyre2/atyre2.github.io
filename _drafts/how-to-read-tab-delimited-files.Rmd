@@ -47,11 +47,34 @@ map_chr(tidyv, class)
 
 For the most part that difference isn't going to be noticeable, because most R functions will coerce a character vector to a factor if a factor is what they want. So, if you have nice clean data then you'll get more or less the same thing, or with differences that can mostly be ignored.[^tibbletrouble] 
 
-The second tab delimited dataset the students used comes from [a comparative analysis of avian body sizes](http://www.esapubs.org/archive/ecol/E088/096/avian_ssd_jan07.txt).[^opendata]
+The second tab delimited dataset the students used comes from [a comparative analysis of mammal life histories](http://esapubs.org/archive/ecol/E084/093/).[^opendata]
 
 ```{r}
-baser <- read.csv("http://www.esapubs.org/archive/ecol/E088/096/avian_ssd_jan07.txt", sep="\t")
-tidyv <- read_tsv("http://www.esapubs.org/archive/ecol/E088/096/avian_ssd_jan07.txt")
+baser <- read.csv("http://esapubs.org/archive/ecol/E084/093/Mammal_lifehistories_v2.txt", sep="\t")
+tidyv <- read_tsv("http://esapubs.org/archive/ecol/E084/093/Mammal_lifehistories_v2.txt")
+```
+
+I have a love/hate relationship with one feature of `readr` functions -- the messages describing what the function did. Great for developing an analysis. Less great for reporting. This dataset demonstrates one of the other big differences between `base::read.csv()` and `readr::read_tsv()`. The latter doesn't do *anything* to column names, while `read.csv()` by default checks the column names to make sure they don't contain any nasty bits. You can turn this behavior off. So:
+
+```{r}
+all.equal(names(baser), names(tidyv))
+```
+
+```{r}
+names(tidyv)
+```
+
+The offending characters are the slash, spaces and parentheses. For the most part you can actually work with these in R code by surrounding them with back ticks:
+
+```{r}
+mean(tidyv$`mass(g)`, na.rm = TRUE)
+```
+
+I did run into problems when trying to use NSE in ggplot functions:
+
+```{r}
+ggplot(tidyv, aes(x=`mass(g)`)) + geom_histogram() + 
+  scale_x_log10()
 ```
 
 [^allthecode]: All the code for this post, including that not shown, [can be found here](https://github.com/atyre2/atyre2.github.io/raw/master/_drafts/how-to-read-tab-delimited-files.Rmd).
