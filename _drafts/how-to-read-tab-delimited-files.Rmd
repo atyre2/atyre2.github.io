@@ -47,11 +47,11 @@ map_chr(tidyv, class)
 
 For the most part that difference isn't going to be noticeable, because most R functions will coerce a character vector to a factor if a factor is what they want. So, if you have nice clean data then you'll get more or less the same thing, or with differences that can mostly be ignored.[^tibbletrouble] 
 
-The second tab delimited dataset the students used comes from [a comparative analysis of mammal life histories](http://esapubs.org/archive/ecol/E084/093/).[^opendata]
+The second tab delimited dataset the students used comes from [a comparative analysis of mammal life histories](http://esapubs.org/archive/ecol/E084/093/).[^opendata] It uses some non-standard representations of missing values too.
 
 ```{r}
-baser <- read.csv("http://esapubs.org/archive/ecol/E084/093/Mammal_lifehistories_v2.txt", sep="\t")
-tidyv <- read_tsv("http://esapubs.org/archive/ecol/E084/093/Mammal_lifehistories_v2.txt")
+baser <- read.csv("http://esapubs.org/archive/ecol/E084/093/Mammal_lifehistories_v2.txt", sep="\t", na.strings = c("-999","-999.00"))
+tidyv <- read_tsv("http://esapubs.org/archive/ecol/E084/093/Mammal_lifehistories_v2.txt", na = c("-999","-999.00"))
 ```
 
 I have a love/hate relationship with one feature of `readr` functions -- the messages describing what the function did. Great for developing an analysis. Less great for reporting. This dataset demonstrates one of the other big differences between `base::read.csv()` and `readr::read_tsv()`. The latter doesn't do *anything* to column names, while `read.csv()` by default checks the column names to make sure they don't contain any nasty bits. You can turn this behavior off. So:
@@ -70,12 +70,28 @@ The offending characters are the slash, spaces and parentheses. For the most par
 mean(tidyv$`mass(g)`, na.rm = TRUE)
 ```
 
-I did run into problems when trying to use NSE in ggplot functions:
+One consequence of this is that axis labels are nice straight away:
 
 ```{r}
 ggplot(tidyv, aes(x=`mass(g)`)) + geom_histogram() + 
   scale_x_log10()
 ```
+
+I'm sure there are places where the back ticks won't work, and I find them kind of ... kludgy. But that might be just a bit curmudgeonly on my part. In case you *do* need to fix them, there's an easy fix:
+
+```{r}
+names(tidyv) <- make.names(names(tidyv))
+all.equal(names(baser), names(tidyv))
+```
+
+Or you could go the other way and tell `read.csv()` not to mess with the names:
+
+```{r}
+baser <- read.csv("http://esapubs.org/archive/ecol/E084/093/Mammal_lifehistories_v2.txt", sep="\t", na.strings = c("-999","-999.00"), check.names = FALSE)
+names(baser)
+```
+
+On the whole, I can't see much difference between the two approaches. If you (or your collaborators) prepare tidy data with best practices, you'll rarely see a difference. But if you use #otherpeoplesdata a lot, then pick one and stick to it. That won't solve all your data importing woes, but at least you won't inflict unexpected ones on yourself by forgetting what your data import function does! 
 
 [^allthecode]: All the code for this post, including that not shown, [can be found here](https://github.com/atyre2/atyre2.github.io/raw/master/_drafts/how-to-read-tab-delimited-files.Rmd).
 
