@@ -1,7 +1,7 @@
 --- 
 layout: post 
 title:  Model selection and the art of evidence I 
-published: true 
+published: false 
 comments: true
 tags: [statistics, model selection] 
 bibliography: references.bib
@@ -20,6 +20,8 @@ I think of science as a reliable way of gaining knowledge about the nature of re
 
 Over the decades that ecology has been practiced as a distinct science there have been at least 2 broad paradigm shifts in how evidence for or against a particular view of reality is accumulated. The first shift occurred in the late 1960's with [testing specific hypotheses using statistics][therevolution]. The latest shift involved the use of Information Theoretic methods of evaluating multiple hypotheses with a given set of data. Not everyone is on board with this second shift. [^allthecode]
 
+[therevolution]:https://dynamicecology.wordpress.com/2016/05/23/making-modern-ecology-mercer-award-winners-during-the-1950s-and-1960s/
+
 There are many papers on AIC [e.g. @cade2015, @arnold2010uninformative, @richards2011model among many others], and other papers evaluating how to use hypothesis testing, but very few papers combining the two approaches. I think this reflects the partisan stance of most statisticians. People are developing information theory, or Bayesian methods, or refining frequentist methods. There seem to be few people looking at ecology and asking what is best for ecologists, philosophers be damned. [^philosophers] Ecologists have some unique issues with peculiar goals not shared by many other scientists. In particular, fitting observation error models (e.g. mark-recapture, occupancy, N-mixture models) often involves model selection over two distinct processes. There is the process of interest, which is population size, occupancy or survival, and then there is the process of detection. Mixed models are another 2-stage model with variation in both random and fixed effects structures. There is very little guidance on how to proceed in these cases, which means that ecologists start making shit up.[^aside] In particular, a common strategy is to evaluate models for detection or random effect while using a constant model for the ecological process, and then use the top detection/random effects model while evaluating the set of process models. 
 
 [^philosophers]: Don't get me wrong. I think ecologists need more philosophy, not less. But few philosophers think about ecological problems, so we need to think for ourselves. 
@@ -30,9 +32,9 @@ What's wrong with that approach, if anything? My expectation is that these 2 sta
 
 A paper by Paul Doherty and friends [-@Doherty2012] for mark recapture modelling is the only guidance for two stage models I am aware of. They described three broad strategies. The $\phi$ first strategy evaluates models for survival while using a global model for capture probability $p$, then uses the top survival model while evaluating capture rate. The $p$ first strategy reverses the first strategy. Finally, the "all models" strategy evaluates the entire set of models for both $\phi$ and $p$ simultaneously. They compared these three strategies on estimator bias and precision and measures of variable importance. They concluded that the "all models" strategy was superior in all regards. The extent to which these conclusions apply to other 2 stage models is unknown. In addition, they only used AIC model selection, and did not compare that against other methods for model selection, including doing no model selection at all! 
 
-Finally, ecologists in general have failed to recognize that there are alternative statistical objectives, and the best tool for achieving one goal may not be the best tool for all.
+Finally, ecologists in general have failed to recognize that there are alternative statistical objectives, and the best tool for achieving one goal may not be the best tool for all. 
 
-[therevolution]: https://dynamicecology.wordpress.com/2016/05/23/making-modern-ecology-mercer-award-winners-during-the-1950s-and-1960s/
+# Three goals and two methods
 
 Leo Breiman [-@breiman2001] introduced the idea that there are two cultures in statistics - hypothesis testing and prediction. In hypothesis testing, knowledge is built by identifying the simplest hypothesis consistent with a given set of data. This culture focuses on identifying key variables driving a particular response. In contrast, the prediction culture simply aims to predict a response; which variables are important is usually of secondary importance. These two cultures use different statistical tools. Null hypothesis testing is the domain of hypothesis testing, while prediction focuses on measures of predictive performance, especially the ability to predict independent data points. 
 
@@ -46,8 +48,6 @@ Combining the two sources of data with the three goals of statistics provides us
 The particular focus of this series of blog posts are the top row of cells - observational data. I think it is important to think about your location in this table. I believe misplacing the goal results in the inappropriate application of statistical techniques, flawed model selection procedures, and ultimately, compromised scientific inference. So come and have a look with me.
 
 ```{r table,echo=FALSE,results='asis'}
-# need to create this here.
-baseline=c(0.5,0.3667,0.233,0.1,0)
 data = matrix(c(" ","Observation","Experiment","Prediction","Cross Validation","*","Estimation","AIC","*","Hypothesis Testing","AIC","Backwards Selection"),nrow=3,ncol=4)
 
 datatable = xtable(data,label="typology",caption="The combination of data source and inferential goal yields a 2 x 3 table of commonly used methods. The cells marked with * are not typically observed.")

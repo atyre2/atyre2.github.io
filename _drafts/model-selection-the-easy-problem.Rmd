@@ -4,7 +4,6 @@ title:  Model selection and the art of evidence II
 published: false 
 tags: [statistics, model selection] 
 bibliography: references.bib
-output: github_document
 ---
 
 ```{r setup, echo=FALSE, include=FALSE}
@@ -15,12 +14,16 @@ library(tidyr)
 library(broom)
 library(purrr)
 library(ggplot2)
+# need to create this here.
+baseline=c(0.5,0.3667,0.233,0.1,0)
+
 ```
 
 Imagine a situation with a single, continuous response variable and 5 continuous, independent predictor variables. The predictor variables can be scaled and centered, so can be assumed to be normally distributed with a mean of zero and a variance of one. The relationship between the predictors and the response is always linear and there are no interactions. In this circumstance I can always rank the predictor variables from greatest effect to least effect, and I will number the predictor variables from strongest to weakest. I scale the "effect size" of each predictor relative to the residual error in the model $\sigma_{error}$, for example $\beta_1 = c_1\sigma_{error}$, where $\beta_i$ is the coefficient of the $i^{th}$ predictor. If the response has also been centered and scaled, then the intercept $\beta_0$ will be zero and the residual error will be one. With these definitions, a "scenario" consists only of a vector of $c_i$'s. The baseline scenario will be `r print(baseline,digits=2)`, which means the true model consists of only the first four variables.[^allthecode]
 
 ```{r easy1,echo=FALSE,fig.cap='A sample dataset from the baseline scenario with $N=2m=64$.'}
 set.seed(123456)
+
 make.data=function(C=c(2,1,0.5,0.25,0),N,re = 1){
 X = matrix(rnorm(length(C)*N),nrow=N)
 Ypred = X %*% C
@@ -45,9 +48,11 @@ print(lm0.table,type = "html", caption.placement="top", html.table.attributes = 
 ```
 
 There are $m=32$ ($2^5=32$) possible models with 5 linear effect variables. In hypothesis testing mode, the goal is to accurately identify the true model out of the set of possible models. In fact, using AIC does not require that the "true" model is in the set of possible models [@burnham2003model], but this is the easy problem, after all. Measuring the quality of a model selection procedure could be done is several ways. The best metric depends on the goal. For hypothesis testing and AIC we might use the weight of the true model; the frequency with which the true model is the AIC best model is another. Both of these only work if the true model is in the set of possible models. Another metric is model diversity
+
 $$
 H_{model}=\sum_{i=1}^m -w_i log(w_i)
 $$
+
 which is just Shannon-Wiener information calculated using the weights of the models. $e^{H_{model}}$ will have a minimum value of 1 and a maximum value of $m$. This measures the degree of certainty in the conclusion drawn from the model set. 
 
 In hypothesis testing we are concerned with the rejecting the null hypothesis $\beta_i = 0$.  Dupont and Balmer [-@Dupont1998589] provided formulas to calculate the [power of rejecting the hypothesis that $\beta_1 = 0$ for single linear regression](#fig:powerCurve). This power is only an upper bound for the baseline case which includes the effects of other variables as well. The addition of other variables means that the residual error is actually larger, and hence the power lower, if I fit a single variable model to the same data.     

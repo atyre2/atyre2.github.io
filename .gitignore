@@ -5,3 +5,7 @@ _cache
 .Rproj.user
 .Rhistory
 .RData
+_drafts/*.html
+_drafts/*.md
+_drafts/*_cache/
+_drafts/*_files/
