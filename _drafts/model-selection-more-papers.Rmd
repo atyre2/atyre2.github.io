@@ -13,7 +13,8 @@ Doherty et al 2010 comparison of model selection strategies.
 Cade 2015 muddled multimodel inference
 Lukacs etal 2010 model selection bias and freedman's paradox.
 Paper by fahrig and coauthors on effects of multicollinearity.
-
+http://www.stat.columbia.edu/%7Egelman/research/unpublished/loo_stan.pdf
+Banner & Higgs (2017) Considerations for assessing model averaging of regression coefficients. Ecological Applications, 27, 78-93.
 This is the second paragraph. Here's where the link to all the code is as a footnote.[^allthecode]
 
 ```{r setup, echo=FALSE, include=FALSE}
