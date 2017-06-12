@@ -35,7 +35,9 @@ Next, Brian lays out several versions of the equation for $\beta_1$ to show how 
 
 $$
 \begin{aligned}
-\beta_{1,j} = 
+\beta_{1,j} = & \left(X'_1 M'_{C_j} M_{C_j} X_1\right)^{-1}X'_1 M'_{C_j} M_{C_j} y \\
+            = & Cov\left(M_{C_j} X_1 y\right) / Var\left(M_{C_j} X_1\right) \\
+            = & \left(X'_1 X_1\right)^{-1} X'_1 y - \left(X'_1 X_1\right)^{-1} X'_1 X_{C_j} \beta_{C_j}
 \end{aligned}
 $$
 
