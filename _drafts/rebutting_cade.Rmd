@@ -17,7 +17,7 @@ Issues where we agree:
 * using AIC weights to measure relative importance of predictors is a lousy idea.
 * using AIC model averaged coefficients to make predictions is just wrong. 
 
-Where I disagree with Brian is whether it makes sense to model averge regression coefficients at all. Brian's central point is that any degree of multi-collinearity between predictors causes the units of the regression coefficients to change depending on what other predictors are in the model. It is certainly true that the magnitude and even sign of a regression coefficient can change depending on which other predictors are in the model (this is the [Frish-Waugh-Lovell Theorem](https://en.wikipedia.org/wiki/Frisch–Waugh–Lovell_theorem)). Brian's assertion is that the *units* of the regression coefficients change between models as a result of this effect, and that means it is mathematically inappropriate to combine estimates from different models in an average. 
+I'll come back to each of those things below. Where I disagree with Brian is whether it makes sense to model averge regression coefficients at all. Brian's central point is that any degree of multi-collinearity between predictors causes the units of the regression coefficients to change depending on what other predictors are in the model. It is certainly true that the magnitude and even sign of a regression coefficient can change depending on which other predictors are in the model (this is the [Frish-Waugh-Lovell Theorem](https://en.wikipedia.org/wiki/Frisch–Waugh–Lovell_theorem)). Brian's assertion is that the *units* of the regression coefficients change between models as a result of this effect, and that means it is mathematically inappropriate to combine estimates from different models in an average. 
 The consequences of the theorem are clearly correct; it is this latter interpretation of those effects that I disagree with. 
 
 As Brian did, I will start by examining the basic linear regression equation. 
@@ -36,8 +36,11 @@ Next, Brian lays out several versions of the equation for $\beta_1$ to show how 
 $$
 \begin{aligned}
 \beta_{1,j} = & \left(X'_1 M'_{C_j} M_{C_j} X_1\right)^{-1}X'_1 M'_{C_j} M_{C_j} y \\
-            = & Cov\left(M_{C_j} X_1 y\right) / Var\left(M_{C_j} X_1\right) \\
+            = & Cov\left(M_{C_j}, X_1 y\right) / Var\left(M_{C_j} X_1\right) \\
             = & \left(X'_1 X_1\right)^{-1} X'_1 y - \left(X'_1 X_1\right)^{-1} X'_1 X_{C_j} \beta_{C_j}
 \end{aligned}
 $$
 
+I find it easiest to think through the units of the third version. The first term has two parts. The units of $\left(X'_1 X_1\right)^{-1}$ are $X_1^{-2}$. The second part $X'_1 y$ has units of $X_1 y$. Put those together and you get $ y X_1^{-1}$, the same units I found for $\beta_1$ above. The second term is pretty much identical except it has $X_{C_j} \beta_{C_j}$ instead of $y$, but the units of that multiplication are $y$ anyway (see above). So that equation is dimensionally consistent and $\beta_1$ has units of $ y X_1^{-1}$ as expected. 
+
+From that equation changing the components of $X_{C_j}$ will change the magnitude and possibly the sign of $\beta_1$. But not the units. So it is legitimate to average different values of $beta_1$ across the models. It still might not be a good idea to do it when there is multi-collinearity, but not because the units change. 
