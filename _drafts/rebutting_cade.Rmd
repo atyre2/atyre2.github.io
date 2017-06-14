@@ -41,11 +41,11 @@ $$
 \end{aligned}
 $$
 
-I find it easiest to think through the units of the third version. The first term has two parts. The units of $\left(X'_1 X_1\right)^{-1}$ are $X_1^{-2}$. The second part $X'_1 y$ has units of $X_1 y$. Put those together and you get $ y X_1^{-1}$, the same units I found for $\beta_1$ above. The second term is pretty much identical except it has $X_{C_j} \beta_{C_j}$ instead of $y$, but the units of that matrix multiplication are $y$ anyway (see above). So that equation is dimensionally consistent and $\beta_1$ has units of $ y X_1^{-1}$ as expected. 
+I find it easiest to think through the units of the third version. The first term has two parts. The units of $\left(X'_1 X_1\right)^{-1}$ are $X_1^{-2}$. The second part $X'_1 y$ has units of $X_1 y$. Put those together and you get $y X_1^{-1}$, the same units I found for $\beta_1$ above. The second term is pretty much identical except it has $X_{C_j} \beta_{C_j}$ instead of $y$, but the units of that matrix multiplication are $y$ anyway (see above). So that equation is dimensionally consistent and $\beta_1$ has units of $y X_1^{-1}$ as expected. 
 
-From that equation changing the components of $X_{C_j}$ will change the magnitude and possibly the sign of $\beta_1$. But not the units. So it is legitimate to average different values of $beta_1$ across the models. It still might not be a good idea to do it when there is multi-collinearity, but not because the units change. 
+From that equation changing the components of $X_{C_j}$ will change the magnitude and possibly the sign of $\beta_1$. But not the units. So it is legitimate to average different values of $\beta_1$ across the models. It still might not be a good idea to do it when there is multi-collinearity, but not because the units change. 
 
-However, even if the magnitude and sign of the coefficient vary between models by a large amount, I think it is reasonable to examine a model averaged estimate of the coefficient as long as the variation is not due to including interaction terms in some of the models. The reason is that large variation between models will either lead to an increase in the model averaged standard error of the coefficient, or the offending model(s) will have a very small weight. In the first instance the model averaging procedure will in fact have told us exactly what we should conclude: conditional on this model set and data, we have poor information about the exact value of that coefficient. I will demonstrate using the simulated example that Brian created for habitat selection by sagegrouse.
+However, even if the magnitude and sign of the coefficient vary between models by a large amount, I think it is reasonable to examine a model averaged estimate of the coefficient as long as the variation is not due to including interaction terms in some of the models. The reason is that large variation between models will either lead to an increase in the model averaged standard error of the coefficient, or the offending model(s) will have a very small weight. In the first instance the model averaging procedure will in fact have told us exactly what we should conclude: conditional on this model set and data, we have poor information about the exact value of that coefficient. I will demonstrate using the simulated example that Brian created for habitat selection by sagegrouse. It is important to point out that this example is *designed* to be problematic, and demonstrate the issues that arise with compositional covariates. Those issues are real. What I want to do here is check to see if model averaging coefficients in this highly problematic case leads to incorrect conclusions. 
 
 ```{r}
 library(tidyverse)
@@ -74,10 +74,11 @@ df$y <- rpois(200,mean.y)
 library(MuMIn)
 globalMod <- glm(y ~ x1 + x2 + x3 + x4, data = df, na.action = na.fail, family=poisson())
 fits <- dredge(globalMod)
+options(digits = 2)
 model.sel(fits)
 ```
 
-That's some crazy stuff! Depending on which other variables are in the model, the coefficients for $x_1$ and $x_2$ can even be negative, although those models have a very low weight. The coefficients for $x_3$ and $x_4$ (things grouse don't like) are positive in some of the top models. Using the common rule-of-thumb that I hate, there are 4 models with $\Delta AIC_c < 2$ and trying to explain why the coefficient of $x_4$ is positive would cause some degree of heartburn.
+That's some crazy stuff! Depending on which other variables are in the model, the coefficient for $x_1$ can even be negative, although those models have a very low weight. Using the common rule-of-thumb that I hate, there are 4 models with $\Delta AIC_c < 2$ and trying to explain why the coefficient of $x_1$ is sometimes positive and sometimes negative would cause some degree of heartburn.
 
 Does looking at model averaged coefficients help? I only use the "full" average over all models.
 
@@ -95,4 +96,5 @@ ma_coefs <- mutate(ma_coefs,
 knitr::kable(ma_coefs, digits = 2)
 ```
 
-In my opinion this tells us exactly what we want to know. The confidence intervals all include the true values, and all the coefficients have the correct sign. However, none of the confidence intervals exclude zero. This reflects the fact that conditional on this model set and data, there is not much information about habitat selection.  
+In my opinion this tells us exactly what we want to know. The confidence intervals all include the true values, and all the coefficients have the correct sign. However, none of the confidence intervals exclude zero. This reflects the fact that conditional on this model set and data, there is not much information about habitat selection.   
+
