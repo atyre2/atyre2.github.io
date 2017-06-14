@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Does model averaging make sense?"  
-date: `r Sys.time()`
+date: "`r Sys.time()`"
 published: false
 tags: [model selection, r, ecology]
 ---
@@ -77,12 +77,22 @@ fits <- dredge(globalMod)
 model.sel(fits)
 ```
 
-That's some crazy stuff! Depending on which other variables are in the model, the coefficients for x1 and x2 can even be negative, although those models have a very low weight. The coefficients for x3 and x4 (things grouse don't like) are in fact positive in all the top models. 
+That's some crazy stuff! Depending on which other variables are in the model, the coefficients for $x_1$ and $x_2$ can even be negative, although those models have a very low weight. The coefficients for $x_3$ and $x_4$ (things grouse don't like) are positive in some of the top models. Using the common rule-of-thumb that I hate, there are 4 models with $\Delta AIC_c < 2$ and trying to explain why the coefficient of $x_4$ is positive would cause some degree of heartburn.
 
-Does looking at model averaged coefficients help?
+Does looking at model averaged coefficients help? I only use the "full" average over all models.
 
 ```{r}
-summary(model.avg(fits))
+ma_df <- model.avg(fits)
+ma_coefs <- coefTable(ma_df, full=TRUE, adjust.se = TRUE)
+coefnames <- row.names(ma_coefs)
+ma_coefs <- as.data.frame(ma_coefs)
+ma_coefs <- mutate(ma_coefs,
+                   coefficient = coefnames,
+                   t = Estimate / `Std. Error`,
+                   p = pt(abs(t), df = 195, lower.tail = FALSE),
+                   lower95 = Estimate - 1.96 * `Std. Error`,
+                   upper95 = Estimate + 1.96 * `Std. Error`) %>% select(coefficient, Estimate, `Std. Error`, t, p, lower95, upper95)
+knitr::kable(ma_coefs, digits = 2)
 ```
 
-This is better -- at least the estimates for x1 and x2 are in the right ballpark, and they are considered significantly different from zero. x3 and x4, although positive, are not significantly different from zero. 
+In my opinion this tells us exactly what we want to know. The confidence intervals all include the true values, and all the coefficients have the correct sign. However, none of the confidence intervals exclude zero. This reflects the fact that conditional on this model set and data, there is not much information about habitat selection.  
