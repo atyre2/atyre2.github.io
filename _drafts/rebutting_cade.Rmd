@@ -123,4 +123,8 @@ importance(fits)
 
 That doesn't really help us at all. Just don't do it.
 
-## 
+## Model averaging predictions
+
+Brian points out, and I agree, that the solution to many model selection uncertainty conundrums is to model average the predictions. This avoids all the disagreements above completely, because the units of the response are always the units of the response, and everyone agrees on that! I much prefer model averaged predictions over almost anything else, if you're using AIC~c~ based model selection. 
+
+One very large problem: *do not* ever (really, *never*), use model averaged coefficients to make model averaged predictions. This has nothing to do with the validity of model averaged coefficients. Rather, it is a consequence of the fallacy of non-linear averaging, AKA Jensen's Inequality. The only time the model averaged coefficients will give the right answer for model averaged predictions is when the model is linear in the coefficients **and** the link between the linear predictor and the expected response is the identity function. In any other instance the answer will be wrong. Even if you are in that particular instance, getting the variance of the model averaged prediction from the coefficients is challenging. Both problems disappear if you just generate predictions from each model and then model average those. 
