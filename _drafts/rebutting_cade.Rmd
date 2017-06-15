@@ -99,6 +99,16 @@ knitr::kable(ma_coefs, digits = 2)
 
 In my opinion this tells us exactly what we want to know. The confidence intervals all include the true values, and all the coefficients have the correct sign. However, none of the confidence intervals exclude zero. This reflects the fact that conditional on this model set and data, there is not much information about habitat selection. This is a bit depressing given the strength of the effects and the sample size, but arises because of the strong multicollinearity between predictor variables. 
 
+My estimate of the potential for multicollinearity to make life difficult went way, way up after working through Brian's examples. In particular, the naive application of pairwise correlation coefficients completely fails to detect the problem in this case. Where available, Variance Inflation Factors are better:
+
+```{r}
+# unfortunately dredge() orders the models
+# by default, so get model 5
+car::vif(get.models(fits, 5)[[1]])
+```
+
+So even though the pairwise correlation coefficients are not raising alarms, `vif()` *does*. This should always be run on the global model in the set *before* doing the AIC~c~ analysis. Unfortunately `vif()` doesn't work (directly) on many models of interest to ecologists.
+
 ## Model Averaging including interaction terms
 
 One place where model averging coefficients really will get you in trouble is when there are interaction terms. The problem is that when there is an interaction term between $X_1$ and $X_i$, then the interpretation of $\beta_1$ shifts to be $y X^{-1}_{1}$ conditional on $X_2 = 0$. This can also lead to the magnitude of $\beta_1$ jumping around, and it is so frowned upon that many automatic model averaging functions will simply return an error if they detect the presence of an interaction. I think there is an easy fix to this problem. If all continuous covariates are centered, and [all categorical predictors use sum-to-zero contrasts](https://atyre2.github.io/2016/09/03/sum-to-zero-contrasts.html), then I think the interpretation of the individual coefficients does not change when interactions are present. But that's mostly a guess. For now I recommend not model averaging coefficients when there are interactions present in some of the models. Model average the predictions from all the models if you really want help interpreting the model set.
@@ -113,4 +123,4 @@ importance(fits)
 
 That doesn't really help us at all. Just don't do it.
 
-##
+## 
