@@ -16,8 +16,9 @@ Issues where Brian and I agree:
 * model averaging including interaction terms is problematic.
 * using AIC weights to measure relative importance of predictors is a lousy idea.
 * using AIC model averaged coefficients to make predictions is just wrong. 
+* model averaging *predictions* from a model set is always OK.
 
-I'll come back to each of those things below. Where I disagree with Brian is whether it makes sense to model averge regression coefficients at all. Brian's central point is that any degree of multi-collinearity between predictors causes the units of the regression coefficients to change depending on what other predictors are in the model. It is certainly true that the magnitude and even sign of a regression coefficient can change depending on which other predictors are in the model (this is the [Frish-Waugh-Lovell Theorem](https://en.wikipedia.org/wiki/Frisch–Waugh–Lovell_theorem)). Brian's assertion is that the *units* of the regression coefficients change between models as a result of this effect, and that means it is mathematically inappropriate to combine estimates from different models in an average. 
+I'll come back to each of those things below. Where I disagree with Brian is whether it makes sense to model averge regression coefficients at all. Brian's central point is that any degree of multi-collinearity between predictors causes the *units* of the regression coefficients to change depending on what other predictors are in the model. It is certainly true that the magnitude and even sign of a regression coefficient can change depending on which other predictors are in the model (this is the [Frish-Waugh-Lovell Theorem](https://en.wikipedia.org/wiki/Frisch–Waugh–Lovell_theorem)). Brian's assertion is that the *units* of the regression coefficients change between models as a result of this effect, and that means it is mathematically inappropriate to combine estimates from different models in an average. 
 The consequences of the theorem are clearly correct; it is this latter interpretation of those effects that I disagree with. 
 
 As Brian did, I will start by examining the basic linear regression equation. 
@@ -96,5 +97,20 @@ ma_coefs <- mutate(ma_coefs,
 knitr::kable(ma_coefs, digits = 2)
 ```
 
-In my opinion this tells us exactly what we want to know. The confidence intervals all include the true values, and all the coefficients have the correct sign. However, none of the confidence intervals exclude zero. This reflects the fact that conditional on this model set and data, there is not much information about habitat selection.   
+In my opinion this tells us exactly what we want to know. The confidence intervals all include the true values, and all the coefficients have the correct sign. However, none of the confidence intervals exclude zero. This reflects the fact that conditional on this model set and data, there is not much information about habitat selection. This is a bit depressing given the strength of the effects and the sample size, but arises because of the strong multicollinearity between predictor variables. 
 
+## Model Averaging including interaction terms
+
+One place where model averging coefficients really will get you in trouble is when there are interaction terms. The problem is that when there is an interaction term between $X_1$ and $X_i$, then the interpretation of $\beta_1$ shifts to be $y X^{-1}_{1}$ conditional on $X_2 = 0$. This can also lead to the magnitude of $\beta_1$ jumping around, and it is so frowned upon that many automatic model averaging functions will simply return an error if they detect the presence of an interaction. I think there is an easy fix to this problem. If all continuous covariates are centered, and [all categorical predictors use sum-to-zero contrasts](https://atyre2.github.io/2016/09/03/sum-to-zero-contrasts.html), then I think the interpretation of the individual coefficients does not change when interactions are present. But that's mostly a guess. For now I recommend not model averaging coefficients when there are interactions present in some of the models. Model average the predictions from all the models if you really want help interpreting the model set.
+
+## Variable importance weights suck
+
+Checkout the variable importance weights from the example above
+
+```{r}
+importance(fits)
+```
+
+That doesn't really help us at all. Just don't do it.
+
+##
