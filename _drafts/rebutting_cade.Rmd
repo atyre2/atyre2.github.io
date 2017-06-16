@@ -13,12 +13,16 @@ First let's deal with the common ground. Brian's assessment of how carelessly AI
 Issues where Brian and I agree:
 
 * Multi-collinearity among predictors is bad. Really bad. Worse than I thought.
-* model averaging including interaction terms is problematic.
-* using AIC weights to measure relative importance of predictors is a lousy idea.
-* using AIC model averaged coefficients to make predictions is just wrong. 
-* model averaging *predictions* from a model set is always OK.
+* Model averaging including interaction terms is problematic.
+* Using AIC weights to measure relative importance of predictors is a lousy idea.
+* Using AIC model averaged coefficients to make predictions is just wrong. 
+* Model averaging *predictions* from a model set is always OK.
 
-I'll come back to each of those things below. Where I disagree with Brian is whether it makes sense to model averge regression coefficients at all. Brian's central point is that any degree of multi-collinearity between predictors causes the *units* of the regression coefficients to change depending on what other predictors are in the model. It is certainly true that the magnitude and even sign of a regression coefficient can change depending on which other predictors are in the model (this is the [Frish-Waugh-Lovell Theorem](https://en.wikipedia.org/wiki/Frisch–Waugh–Lovell_theorem)). Brian's assertion is that the *units* of the regression coefficients change between models as a result of this effect, and that means it is mathematically inappropriate to combine estimates from different models in an average. 
+I'll come back to each of those things below. 
+
+## Is model averaging estimated coefficients legitimate?
+
+Where I disagree with Brian is whether it makes sense to model average regression coefficients at all. Brian's central point is that any degree of multi-collinearity between predictors causes the *units* of the regression coefficients to change depending on what other predictors are in the model. It is certainly true that the magnitude and even sign of a regression coefficient can change depending on which other predictors are in the model (this is the [Frish-Waugh-Lovell Theorem](https://en.wikipedia.org/wiki/Frisch–Waugh–Lovell_theorem)). Brian's assertion is that the *units* of the regression coefficients change between models as a result of this effect, and that means it is mathematically inappropriate to combine estimates from different models in an average. 
 The consequences of the theorem are clearly correct; it is this latter interpretation of those effects that I disagree with. 
 
 As Brian did, I will start by examining the basic linear regression equation. 
@@ -46,9 +50,10 @@ I find it easiest to think through the units of the third version. The first ter
 
 From that equation changing the components of $X_{C_j}$ will change the magnitude and possibly the sign of $\beta_1$. But not the units. So it is legitimate to average different values of $\beta_1$ across the models. It still might not be a good idea to do it when there is multi-collinearity, but not because the units change. 
 
-However, even if the magnitude and sign of the coefficient vary between models by a large amount, I think it is reasonable to examine a model averaged estimate of the coefficient as long as the variation is not due to including interaction terms in some of the models. The reason is that large variation between models will either lead to an increase in the model averaged standard error of the coefficient, or the offending model(s) will have a very small weight. In the first instance the model averaging procedure will in fact have told us exactly what we should conclude: conditional on this model set and data, we have poor information about the exact value of that coefficient. I will demonstrate using the simulated example that Brian created for habitat selection by sagegrouse. It is important to point out that this example is *designed* to be problematic, and demonstrate the issues that arise with compositional covariates. Those issues are real. What I want to do here is check to see if model averaging coefficients in this highly problematic case leads to incorrect conclusions. 
+However, even if the magnitude and sign of the coefficient vary between models by a large amount, I think it is reasonable to examine a model averaged estimate of the coefficient as long as the variation is not due to including interaction terms in some of the models. The reason is that large variation between models will either lead to an increase in the model averaged standard error of the coefficient, or the offending model(s) will have a very small weight. In the first instance the model averaging procedure will in fact have told us exactly what we should conclude: conditional on this model set and data, we have poor information about the exact value of that coefficient. I will demonstrate using the simulated example that Brian created for habitat selection by sage grouse. It is important to point out that this example is *designed* to be problematic, and demonstrate the issues that arise with compositional covariates. Those issues are real. What I want to do here is check to see if model averaging coefficients in this highly problematic case leads to incorrect conclusions. 
 
-```{r}
+```{r makeData, message=FALSE}
+# all this data generation is from Cade 2015
 library(tidyverse)
 library(GGally)
 # doesn't matter what this is -- if you use a different number your results will be different from mine.
@@ -66,7 +71,7 @@ ggpairs(df)
 
 ```
 
-So there is a near perfect negative correlation between the things sagegrouse like and the things they don't like, although it gets less bad when considering the individual covariates. In fact, looking at the correlations between just x1 through x4 none of them have correlations bigger than $|0.7|$, so common "rules of thumb" would not exclude them. Now we'll build up a Poisson response, and fit all the models 
+So there is a near perfect negative correlation between the things sage grouse like and the things they don't like, although it gets less bad when considering the individual covariates. In fact, looking at the correlations between just x1 through x4 none of them have correlations bigger than $|0.7|$, so common "rules of thumb" would not exclude them. Now we'll build up a Poisson response, and fit all the models 
 
 ```{r}
 mean.y <- exp(-5.8 + 6.3*df$x1 + 15.2*df$x2)
@@ -79,7 +84,7 @@ options(digits = 2)
 model.sel(fits)
 ```
 
-That's some crazy stuff! Depending on which other variables are in the model, the coefficient for $x_1$ can even be negative, although those models have a very low weight. Using the common rule-of-thumb that I hate, there are 4 models with $\Delta AIC_c < 2$ and trying to explain why the coefficient of $x_1$ is sometimes positive and sometimes negative would cause some degree of heartburn.
+That's some crazy stuff! Depending on which other variables are in the model, the coefficient for $x_1$ can even be negative. Using the common rule-of-thumb that I hate, there are 4 models with $\Delta AIC_c < 2$ and trying to explain why the coefficient of $x_1$ is sometimes positive and sometimes negative would cause some degree of heartburn.
 
 Does looking at model averaged coefficients help? I only use the "full" average over all models.
 
@@ -97,21 +102,25 @@ ma_coefs <- mutate(ma_coefs,
 knitr::kable(ma_coefs, digits = 2)
 ```
 
-In my opinion this tells us exactly what we want to know. The confidence intervals all include the true values, and all the coefficients have the correct sign. However, none of the confidence intervals exclude zero. This reflects the fact that conditional on this model set and data, there is not much information about habitat selection. This is a bit depressing given the strength of the effects and the sample size, but arises because of the strong multicollinearity between predictor variables. 
+In my opinion this tells us exactly what we want to know. The confidence intervals all include the true values, and all the coefficients have the correct sign. However, none of the confidence intervals exclude zero. This reflects the fact that conditional on this model set and data, there is not much information about habitat selection. This is a bit depressing given the strength of the effects and the sample size, but arises because of the strong multi-collinearity between predictor variables. 
 
-My estimate of the potential for multicollinearity to make life difficult went way, way up after working through Brian's examples. In particular, the naive application of pairwise correlation coefficients completely fails to detect the problem in this case. Where available, Variance Inflation Factors are better:
+My estimate of the potential for multi-collinearity to make life difficult went way, way up after working through Brian's examples. In particular, the naive application of pairwise correlation coefficients completely fails to detect the problem in this case. Where available, Variance Inflation Factors are better:
 
 ```{r}
-# unfortunately dredge() orders the models
-# by default, so get model 5
+# unfortunately dredge() orders the models by AIC
+# by default, so global model is 5
 car::vif(get.models(fits, 5)[[1]])
 ```
 
-So even though the pairwise correlation coefficients are not raising alarms, `vif()` *does*. This should always be run on the global model in the set *before* doing the AIC~c~ analysis. Unfortunately `vif()` doesn't work (directly) on many models of interest to ecologists.
+So even though the pairwise correlation coefficients are not raising alarms, `car::vif()` *does*. This should always be run on the global model in the set *before* doing the AIC~c~ analysis. Unfortunately `car::vif()` doesn't work (directly) on many models of interest to ecologists.
 
 ## Model Averaging including interaction terms
 
-One place where model averging coefficients really will get you in trouble is when there are interaction terms. The problem is that when there is an interaction term between $X_1$ and $X_i$, then the interpretation of $\beta_1$ shifts to be $y X^{-1}_{1}$ conditional on $X_2 = 0$. This can also lead to the magnitude of $\beta_1$ jumping around, and it is so frowned upon that many automatic model averaging functions will simply return an error if they detect the presence of an interaction. I think there is an easy fix to this problem. If all continuous covariates are centered, and [all categorical predictors use sum-to-zero contrasts](https://atyre2.github.io/2016/09/03/sum-to-zero-contrasts.html), then I think the interpretation of the individual coefficients does not change when interactions are present. But that's mostly a guess. For now I recommend not model averaging coefficients when there are interactions present in some of the models. Model average the predictions from all the models if you really want help interpreting the model set.
+One place where model averaging coefficients really will get you in trouble is when there are interaction terms. The problem is that when there is an interaction term between $X_1$ and $X_i$, then the interpretation of $\beta_1$ shifts to be $y X^{-1}_{1}$ conditional on $X_2 = 0$. This can also lead to the magnitude of $\beta_1$ jumping around, and it is so frowned upon that many automatic model averaging functions will simply return an error if they detect the presence of an interaction. 
+
+Thinking about how the interpretation shifts in the presence of a different predictor is still not assuming the units change. The big difference between the discussion above and the effect of including an interaction is that in the presence of an interaction the interpretation of the coefficient is assuming *a particular value* of another covariate. Not just the presence of that covariate, but a specific value. 
+
+I think there is an easy fix to this problem. If all continuous covariates are centered, and [all categorical predictors use sum-to-zero contrasts](https://atyre2.github.io/2016/09/03/sum-to-zero-contrasts.html), then I think the interpretation of the individual coefficients does not change when interactions are present. But that's mostly a guess. For now I recommend not model averaging coefficients when there are interactions present in some of the models. Model average the predictions from all the models if you really want help interpreting the model set.
 
 ## Variable importance weights suck
 
@@ -121,10 +130,14 @@ Checkout the variable importance weights from the example above
 importance(fits)
 ```
 
-That doesn't really help us at all. Just don't do it.
+That doesn't really help us at all. There isn't much variation between them. The rank order matches the relative magnitude of the true coefficents. Just don't do it.
 
 ## Model averaging predictions
 
 Brian points out, and I agree, that the solution to many model selection uncertainty conundrums is to model average the predictions. This avoids all the disagreements above completely, because the units of the response are always the units of the response, and everyone agrees on that! I much prefer model averaged predictions over almost anything else, if you're using AIC~c~ based model selection. 
 
 One very large problem: *do not* ever (really, *never*), use model averaged coefficients to make model averaged predictions. This has nothing to do with the validity of model averaged coefficients. Rather, it is a consequence of the fallacy of non-linear averaging, AKA Jensen's Inequality. The only time the model averaged coefficients will give the right answer for model averaged predictions is when the model is linear in the coefficients **and** the link between the linear predictor and the expected response is the identity function. In any other instance the answer will be wrong. Even if you are in that particular instance, getting the variance of the model averaged prediction from the coefficients is challenging. Both problems disappear if you just generate predictions from each model and then model average those. 
+
+## Conclusion
+
+IMO, it is legitimate to model average coefficients in some circumstances. There are many issues with interpretation and analysis when using AIC~c~ in ecology, but let's not throw the baby out with the bathwater. 
