@@ -3,6 +3,7 @@ layout: post
 title: "Does model averaging make sense?"  
 date: "2017-06-16 10:18:27"
 published: true
+comments: true
 tags: [model selection, r, ecology]
 ---
 
