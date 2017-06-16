@@ -9,7 +9,7 @@ tags: [model selection, r, ecology]
 
 Brian Cade [published a scathing condemnation of current statistical practices in ecology.](http://onlinelibrary.wiley.com/doi/10.1890/14-1639.1/full) It promises to be highly influential; I have seen it cited by reviewers already. I agree with a great many points Brian raised. I also disagree with one very central point. 
 
-First let's deal with the common ground. Brian's assessment of how carelessly AIC~c~ based model averaging is being used by ecologists is spot on. There's a lot of sloppy reporting of results as well as egregiously misinformed conclusions. Perhaps the biggest issue with AIC~c~ approaches is that they require *thinking* to be used effectively. In my experience with teaching ecologists to analyze data, they are desperate to avoid thinking, and it's close cousin, judgement. They want a turn key analysis with a clear, unambiguous interpretation. Unfortunately that's not what AIC~c~ gives you. 
+First let's deal with the common ground. Brian's assessment of how carelessly $$AIC_c$$ based model averaging is being used by ecologists is spot on. There's a lot of sloppy reporting of results as well as egregiously misinformed conclusions. Perhaps the biggest issue with $$AIC_c$$ approaches is that they require *thinking* to be used effectively. In my experience with teaching ecologists to analyze data, they are desperate to avoid thinking, and it's close cousin, judgement. They want a turn key analysis with a clear, unambiguous interpretation. Unfortunately that's not what $$AIC_c$$ gives you. 
 
 Issues where Brian and I agree:
 
@@ -74,7 +74,7 @@ ggpairs(df)
 
 ![plot of chunk makeData](/figure/rebutting_cade/makeData-1.png)
 
-So there is a near perfect negative correlation between the things sage grouse like and the things they don't like, although it gets less bad when considering the individual covariates. In fact, looking at the correlations between just x1 through x4 none of them have correlations bigger than $$|0.7|$$, so common "rules of thumb" would not exclude them. Now we'll build up a Poisson response, and fit all the models 
+So there is a near perfect negative correlation between the things sage grouse like and the things they don't like, although it gets less bad when considering the individual covariates. In fact, looking at the correlations between just x1 through x4 none of them have correlations bigger than $$\abs{0.7}$$, so common "rules of thumb" would not exclude them. Now we'll build up a Poisson response, and fit all the models 
 
 
 ```r
@@ -165,7 +165,7 @@ car::vif(get.models(fits, 5)[[1]])
 ## 201 147  39  38
 ```
 
-So even though the pairwise correlation coefficients are not raising alarms, `car::vif()` *does*. This should always be run on the global model in the set *before* doing the AIC~c~ analysis. Unfortunately `car::vif()` doesn't work (directly) on many models of interest to ecologists.
+So even though the pairwise correlation coefficients are not raising alarms, `car::vif()` *does*. This should always be run on the global model in the set *before* doing the $$AIC_c$$ analysis. Unfortunately `car::vif()` doesn't work (directly) on many models of interest to ecologists.
 
 ## Model Averaging including interaction terms
 
@@ -200,4 +200,4 @@ One very large problem: *do not* ever (really, *never*), use model averaged coef
 
 ## Conclusion
 
-IMO, it is legitimate to model average coefficients in some circumstances. There are many issues with interpretation and analysis when using AIC~c~ in ecology, but let's not throw the baby out with the bathwater. 
+IMO, it is legitimate to model average coefficients in some circumstances. There are many issues with interpretation and analysis when using $$AIC_c$$ in ecology, but let's not throw the baby out with the bathwater. 
