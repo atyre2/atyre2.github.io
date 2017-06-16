@@ -72,7 +72,7 @@ df <- data_frame(
 ggpairs(df)
 ```
 
-![plot of chunk makeData](../figure/rebutting_cade/makeData-1.png)
+![plot of chunk makeData](figure/rebutting_cade/makeData-1.png)
 
 So there is a near perfect negative correlation between the things sage grouse like and the things they don't like, although it gets less bad when considering the individual covariates. In fact, looking at the correlations between just x1 through x4 none of them have correlations bigger than $|0.7|$, so common "rules of thumb" would not exclude them. Now we'll build up a Poisson response, and fit all the models 
 
