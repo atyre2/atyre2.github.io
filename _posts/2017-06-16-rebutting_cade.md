@@ -35,7 +35,7 @@ E[y|x] = & X_1 \beta_1 + X_c \beta_c + \epsilon
 \end{aligned}
 $$
 
-The second equation partitions the predictors into a focal predictor $X_1$ and everything else, $X_c$. $\beta_1$ is a 1 x 1 matrix of the regression coefficient for $X_1$, and $\beta_c$ is a vector of regression coefficients for all the other predictors in $X_c$. When I look at that equation, it seems to me that the units of the products $X_1\beta_1$ and $X_c\beta_c$ have to be units of $y$. If that's the case, then the units of $\beta_1$ are $y / X_1$. This might be the place where there is some deeper mathematics going on, so I am happy to be corrected, but as far as I can see the units of $\beta_1$ are independent of whatever $X_c$ is. 
+The second equation partitions the predictors into a focal predictor $$X_1$$ and everything else, $X_c$. $\beta_1$ is a 1 x 1 matrix of the regression coefficient for $X_1$, and $\beta_c$ is a vector of regression coefficients for all the other predictors in $X_c$. When I look at that equation, it seems to me that the units of the products $X_1\beta_1$ and $X_c\beta_c$ have to be units of $y$. If that's the case, then the units of $\beta_1$ are $y / X_1$. This might be the place where there is some deeper mathematics going on, so I am happy to be corrected, but as far as I can see the units of $\beta_1$ are independent of whatever $X_c$ is. 
 
 Next, Brian lays out several versions of the equation for $\beta_1$ to show how it is influenced by $X_c$. Maybe this is where the units change.
 
