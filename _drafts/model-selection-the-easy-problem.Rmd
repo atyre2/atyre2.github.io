@@ -14,6 +14,8 @@ library(tidyr)
 library(broom)
 library(purrr)
 library(ggplot2)
+library(leaps)
+library(MASS)
 # need to create this here.
 baseline=c(0.5,0.3667,0.233,0.1,0)
 
@@ -79,9 +81,10 @@ The metrics discussed above do not tell us whether that conclusion is biased how
 
 Finally, I am interested in the precision of the estimated effects and predictions. In general, a model selection procedure that produces more precise estimates and predictions is preferred. However, I also worry about "coverage" -- how does the probability of the true value falling in a confidence interval compare to the nominal probability? 
 
-I'll use four different model selection approaches for each goal. The first is the simplest. Following the recommendation of Harrell [-@Harrell2001] I will simply use the full model with all variables considered. The second procedure is backwards selection; starting with the full model remove terms with the smallest F ratios until all remaining terms have significant F ratios when deleted. For the third and fourth methods I will use AIC in two different ways. The third approach will simply use the AIC selected top model only. Finally I will use the entire model set to test hypotheses, make predictions, and estimate effects in a Multimodel inference framework. 
-
+I'll use five different model selection approaches for each goal. The first is the simplest. Following the recommendation of Harrell [-@Harrell2001] I will simply use the full model with all variables considered. The second procedure is backwards selection; starting with the full model remove terms with the smallest F ratios until all remaining terms have significant F ratios when deleted. For the third and fourth methods I will use AIC in two different ways. The third approach will simply use the AIC selected top model only. Fourth, I will use the entire model set to test hypotheses, make predictions, and estimate coefficients. Finally, I will follow a suggestion of Ben Bolker and explore the use of shrinkage methods like the lasso. 
 ### Hypothesis testing
+
+#### Full model
 
 For hypothesis testing I want to know how often I reject a null hypothesis of interest. The simplest null is $\beta_i = 0$. I'm also interested in the overall F test -- the probability that at least one of the predictors is significant.
 
@@ -119,6 +122,55 @@ ggplot(df2, aes(x = factor(N), y = p.value)) + geom_boxplot() + geom_hline(yinte
 ```
 
 This is essentially the inverse of the power curve for the overall model. Somewhere around 5 times the number of estimated parameters gives a median *p* less than 0.05. That's not as bad as I expected. 
+
+#### Backwards selection
+
+Now I will use backwards selection to simplify each model prior to testing the hypotheses for each coefficient and the overall model. I need to write a little function to automate backwards selection using F tests. There are other tools out there (e.g. package leaps) but they all seem to use AIC or other information criteria.
+
+```{r testPowerBS}
+set.seed(234561)
+results = matrix(NA,nrow=1000,ncol=7)
+autodrop <- function(fullmodel){
+  keepgoing <- TRUE
+  currentmodel <- fullmodel
+  currentvars <- all.vars(formula(fullmodel))
+  while(keepgoing){
+    drop1out <- drop1(currentmodel, test="F")
+    if (max(drop1out$`Pr(>F)`, na.rm = TRUE) < 0.05 | length(currentvars)<2){
+      keepgoing <- FALSE
+    } else {
+      dropvar <- which.max(drop1out$`Pr(>F)`)
+      currentFormula <- formula(currentmodel)
+      currentVars <- all.vars(currentFormula)
+      newFormula <- paste(currentVars[c(-1, -dropvar)], collapse="+")
+      if (nchar(newFormula)>0){
+        newFormula <- paste0("Y~", newFormula)
+      } else {
+        # dropped all variables
+        newFormula <- "Y~1"
+        keepgoing <- FALSE
+      }
+      currentmodel <- update(currentmodel, newFormula)
+    }
+  }
+  return(currentmodel)
+}
+
+BSresults <- replicate(1000, {
+  test.lm = lm(Y~X.1+X.2+X.3+X.4+X.5,data=make.data(baseline,N=N))
+  autodrop(test.lm)
+})
+
+
+simPower <- apply(results[,1:6],2,function(x)sum(x>qt(0.975,N-2)))
+# compare to 
+v = N-2
+power = pt(baseline*sqrt(N)-qt(0.975,v),v) + pt(-baseline*sqrt(N)-qt(0.975,v),v)
+expectedPower <- c(25,floor(power*1000))
+knitr::kable(cbind(simPower,expectedPower))
+
+```
+
 
 ```{r eval=FALSE, echo=FALSE}
 # should be 1,2,3,4,5 
